@@ -7,7 +7,14 @@ if ( !function_exists('nh3_nls_settings_init') ) {
    * Register the settings page on the admin panel.
    */
   function nh3_nls_settings_init() {
-    register_setting( OPTION_GROUP, 'nh3_nls_settings' );
+    register_setting(
+      OPTION_GROUP,
+      'nh3_nls_ui_languages',
+      [
+        'type' => 'string',
+        'sanitize_callback' => 'nh3_nls_ui_languages_sanitize'
+      ]
+    );
 
     add_settings_section(
       'nh3_nls_ui_languages',
@@ -33,6 +40,13 @@ if ( !function_exists('nh3_nls_settings_init') ) {
 add_action( 'admin_init', 'nh3_nls_settings_init' );
 
 /**
+ * Sanitize the user-input for the list of available languages by removing all whitespace.
+ */
+function nh3_nls_ui_languages_sanitize( $input ) {
+  return str_replace(' ', '', $input);
+}
+
+/**
  * Renders the HTML for the UI Languages section.
  */
 function nh3_nls_ui_languages_cb( $args ) {
@@ -43,7 +57,7 @@ function nh3_nls_ui_languages_cb( $args ) {
  * Renders the HTML for the UI Language field.
  */
 function nh3_nls_ui_languages_field_cb( $args ) {
-  $options = get_option( 'nh3_nls_settings' );
+  $options = get_option( 'nh3_nls_ui_languages' );
 
   require_once 'templates/fields/ui-available-languages.php';
 }

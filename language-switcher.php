@@ -29,7 +29,7 @@ if ( !function_exists( 'nh3_nls_define_locale' ) ) {
     define( NLS_COOKIE_NAME, 'nh3-selected-language' );
     define( NLS_GET_PARAM, 'nls' );
 
-    $localeWhitelist = explode(',', get_option( 'nh3_nls_settings' )['ui_languages_field'] );
+    $localeWhitelist = explode(',', get_option( 'nh3_nls_ui_languages' ) );
 
     $localeUrl = in_array( $_GET[NLS_GET_PARAM], $localeWhitelist ) ? $_GET[NLS_GET_PARAM] : null;
     $localeCookie = in_array( $_COOKIE[NLS_COOKIE_NAME], $localeWhitelist ) ? $_COOKIE[NLS_COOKIE_NAME] : null;
