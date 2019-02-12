@@ -1,7 +1,5 @@
 <?php
 
-define( OPTION_GROUP, 'supplang' );
-
 if ( !function_exists( 'supplang_settings_init' ) ) {
 
   /**
@@ -9,7 +7,7 @@ if ( !function_exists( 'supplang_settings_init' ) ) {
    */
   function supplang_settings_init() {
     register_setting(
-      OPTION_GROUP,
+      SL_OPTION_GROUP,
       'supplang_uil_list',
       [
         'type' => 'string',
@@ -21,14 +19,14 @@ if ( !function_exists( 'supplang_settings_init' ) ) {
       'supplang_ui_languages',
       'User Interface Languages',
       'supplang_ui_languages_cb',
-      OPTION_GROUP
+      SL_OPTION_GROUP
     );
 
     add_settings_field(
       'supplang_uil_list',
       __( 'Languages', 'supplang' ),
       'supplang_uil_list_field_cb',
-      OPTION_GROUP,
+      SL_OPTION_GROUP,
       'supplang_ui_languages',
       [
         'label_for' => 'supplang_uil_list',
@@ -81,7 +79,7 @@ if ( !function_exists( 'supplang_options_page' ) ) {
       __('Site Languages', 'supplang'),
       __('Site Languages', 'supplang'),
       'manage_options',
-      OPTION_GROUP,
+      SL_OPTION_GROUP,
       'supplang_settings_page_cb'
     );
   }
