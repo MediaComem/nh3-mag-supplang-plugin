@@ -18,11 +18,10 @@ The value of the field should be a list of [WordPress locales](https://translate
 
 ## Changing the front-end UI language
 
-As of now, the only way to change the UI language is to add an `uil` query parameter to the UI and access it. The value of the `uil` parameter should be one of the value defined in the plugin setting. Any `uil` value that is not one of those value will have no effect at all on the front-end UI.
+To change the language, you can send a POST request on the current URL, sending a POST param named `supplang-uil` whose value should be one of the locale defined in the admin panel.
 
-> **Adding the `uil` query parameter is only required when _changing_ the language.** Any subsequent clik on link or typing of URL will remember the currently selected language.
+You can also use a special function in your templates that displays a select list of the available languages and send the POST request for you. To do so, use this function somewhere in your templates:
 
-**Example:**
-
-Suppose your on the `http://example.com/article/welcome-to-the-jungle` article and you want to see the same article but with a UI in French, you could do so by accessing this URL: `http://example.com/article/welcome-to-the-jungle?uil=fr_FR`.
-> This will only work if you added the `fr_FR` locale to your list of available languages in the settings.
+```php
+sl_languages_selector();
+```
