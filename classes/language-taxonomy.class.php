@@ -32,28 +32,28 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 				array(
 					'name' => 'Français',
 					'desc' => 'Apply this to french written articles',
-					'slug' => 'fr'
+					'slug' => 'fr',
 				),
 				array(
 					'name' => 'Italiano',
 					'desc' => 'Apply this to italian written articles',
-					'slug' => 'it'
+					'slug' => 'it',
 				),
 				array(
 					'name' => 'Rumansch',
 					'desc' => 'Apply this to romansch written articles',
-					'slug' => 'rm'
-				)
+					'slug' => 'rm',
+				),
 			);
 
-			foreach ($default_values as $value) {
+			foreach ( $default_values as $value ) {
 				if ( ! term_exists( $value['name'], $this->tax_name ) ) {
 					wp_insert_term(
 						$value['name'],
 						$this->tax_name,
 						array(
-							'slug' => $value['slug'],
-							'description' => $value['desc']
+							'slug'        => $value['slug'],
+							'description' => $value['desc'],
 						)
 					);
 				}
@@ -65,31 +65,31 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 		 * @author Mathias Oberson
 		 */
 		public function register_taxonomy() {
-			$labels = [
-				'name'              => _x( 'Languages', 'taxonomy general name', 'supplang'),
-				'singular_name'     => _x('Language', 'taxonomy singular name', 'supplang'),
-				'search_items'      => __('Search Languages', 'supplang'),
-				'all_items'         => __('All Languages', 'supplang'),
-				'parent_item'       => __('Parent Language', 'supplang'),
-				'parent_item_colon' => __('Parent Language:', 'supplang'),
-				'edit_item'         => __('Edit Language', 'supplang'),
-				'update_item'       => __('Update Language', 'supplang'),
-				'add_new_item'      => __('Add New Language', 'supplang'),
-				'new_item_name'     => __('New Language Name', 'supplang'),
-				'menu_name'         => __('Language', 'supplang'),
-			];
+			$labels = array(
+				'name'              => _x( 'Languages', 'taxonomy general name', 'supplang' ),
+				'singular_name'     => _x( 'Language', 'taxonomy singular name', 'supplang' ),
+				'search_items'      => __( 'Search Languages', 'supplang' ),
+				'all_items'         => __( 'All Languages', 'supplang' ),
+				'parent_item'       => __( 'Parent Language', 'supplang' ),
+				'parent_item_colon' => __( 'Parent Language:', 'supplang' ),
+				'edit_item'         => __( 'Edit Language', 'supplang' ),
+				'update_item'       => __( 'Update Language', 'supplang' ),
+				'add_new_item'      => __( 'Add New Language', 'supplang' ),
+				'new_item_name'     => __( 'New Language Name', 'supplang' ),
+				'menu_name'         => __( 'Language', 'supplang' ),
+			);
 
-			$args = [
+			$args = array(
 				'hierarchical'      => true,
 				'labels'            => $labels,
 				'show_ui'           => true,
 				'show_in_rest'      => true,
 				'show_admin_column' => true,
 				'query_var'         => true,
-				'rewrite'           => array('slug' => 'lang'),
-			];
+				'rewrite'           => array( 'slug' => 'lang' ),
+			);
 
-			register_taxonomy($this->tax_name, ['post'], $args);
+			register_taxonomy( $this->tax_name, array( 'post' ), $args );
 		}
 
 		/**
@@ -100,18 +100,20 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 		public function add_admin_filter_dropdown() {
 			global $typenow;
 			$post_type = 'post';
-			if ($typenow == $post_type) {
-				$selected      = isset( $_GET[$this->tax_name]  ) ? $_GET[$this->tax_name] : '';
+			if ( $typenow == $post_type ) {
+				$selected      = isset( $_GET[ $this->tax_name ] ) ? $_GET[ $this->tax_name ] : '';
 				$info_taxonomy = get_taxonomy( $this->tax_name );
-				wp_dropdown_categories(array(
-					'show_option_all' => __( 'Show All Languages', 'supplang' ),
-					'taxonomy'        => $this->tax_name,
-					'name'            => $this->tax_name,
-					'orderby'         => 'name',
-					'selected'        => $selected,
-					'show_count'      => true,
-					'hide_empty'      => false,
-				));
+				wp_dropdown_categories(
+					array(
+						'show_option_all' => __( 'Show All Languages', 'supplang' ),
+						'taxonomy'        => $this->tax_name,
+						'name'            => $this->tax_name,
+						'orderby'         => 'name',
+						'selected'        => $selected,
+						'show_count'      => true,
+						'hide_empty'      => false,
+					)
+				);
 			}
 		}
 
@@ -122,12 +124,12 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 		 */
 		public function admin_filter_posts() {
 			global $pagenow;
-			$post_type = 'post';
-			$this->tax_name  = SL_LANG_TAX_ID;
-			$q_vars    = &$query->query_vars;
-			if ( $pagenow == 'edit.php' && isset($q_vars['post_type']) && $q_vars['post_type'] == $post_type && isset($q_vars[$this->tax_name]) && is_numeric($q_vars[$this->tax_name]) && $q_vars[$this->tax_name] != 0 ) {
-				$term = get_term_by('id', $q_vars[$this->tax_name], $this->tax_name);
-				$q_vars[$this->tax_name] = $term->slug;
+			$post_type      = 'post';
+			$this->tax_name = SL_LANG_TAX_ID;
+			$q_vars         = &$query->query_vars;
+			if ( $pagenow == 'edit.php' && isset( $q_vars['post_type'] ) && $q_vars['post_type'] == $post_type && isset( $q_vars[ $this->tax_name ] ) && is_numeric( $q_vars[ $this->tax_name ] ) && $q_vars[ $this->tax_name ] != 0 ) {
+				$term                      = get_term_by( 'id', $q_vars[ $this->tax_name ], $this->tax_name );
+				$q_vars[ $this->tax_name ] = $term->slug;
 			}
 		}
 
