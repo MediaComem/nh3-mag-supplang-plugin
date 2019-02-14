@@ -15,6 +15,21 @@
 define( SL_OPTION_GROUP, 'supplang' ); // Option group name for plugin settings
 define( SL_UIL_NAME, 'supplang-uil' ); // Name used for managing the selected ui languages (POST param and cookie)
 
+define(SL_LANGUAGES, [
+  [
+    "name" => "Français",
+    "locale" => "fr_FR"
+  ],
+  [
+    "name" => "Italiano",
+    "locale" => "it_IT"
+  ],
+  [
+    "name" => "Rumansch",
+    "locale" => "rm_CH"
+  ]
+]);
+
 /**
  * --- LOAD PLUGIN FILES ---
  */

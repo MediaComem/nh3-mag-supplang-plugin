@@ -16,7 +16,9 @@ if ( !function_exists( 'supplang_define_locale' ) ) {
 
     if ( is_admin() ) return;
 
-    $localeWhitelist = explode(',', get_option( 'supplang_uil_list' ) );
+    $localeWhitelist = array_map( function( $language ) {
+      return $language['locale'];
+    }, SL_LANGUAGES );
 
     $localePost = in_array( $_POST[SL_UIL_NAME], $localeWhitelist ) ? $_POST[SL_UIL_NAME] : null;
     $localeCookie = in_array( $_COOKIE[SL_UIL_NAME], $localeWhitelist ) ? $_COOKIE[SL_UIL_NAME] : null;
