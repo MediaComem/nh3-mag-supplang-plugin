@@ -16,12 +16,22 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 		/**
 		 * Called when the plugin is activated.
 		 * Registers the Language custom taxonomy and insert the default values.
+     * Flush the rewrite rules to add new taxonomy url.
 		 * @author Mathias Oberson
 		 */
 		public function activate() {
 			$this->register_taxonomy();
-			$this->add_default_values();
-		}
+      $this->add_default_values();
+      flush_rewrite_rules();
+    }
+
+    /**
+     * Called when the plugin is deactivated.
+     * Currently only flush the rewrite rules to account for the taxonomy not being registered.
+     */
+    public function deactivate() {
+      flush_rewrite_rules();
+    }
 
 		/**
 		 * Add four default languages in the Language custom taxonomy
@@ -86,7 +96,7 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 				'show_in_rest'      => true,
 				'show_admin_column' => true,
 				'query_var'         => true,
-				'rewrite'           => array( 'slug' => 'lang' ),
+				'rewrite'           => array( 'slug' => 'all-articles' ),
 			);
 
 			register_taxonomy( $this->tax_name, array( 'post' ), $args );

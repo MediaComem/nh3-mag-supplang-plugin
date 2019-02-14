@@ -43,10 +43,10 @@ define(
  * --- REGISTER AUTOLOADER ---
  */
 spl_autoload_register(
-	function( $class_name ) {
-		$class_name_parts = explode( '_', $class_name );
+  function( $class_name ) {
+    $class_name_parts = explode( '_', $class_name );
 		if ( SUPPLANG_CLASS_PREFIX === $class_name_parts[0] ) {
-			array_shift( $class_name_parts );
+      array_shift( $class_name_parts );
 			$classes_dir = realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR;
 			$class_file  = strtolower( implode( '-', $class_name_parts ) . '.class.php' );
 			require_once $classes_dir . $class_file;
@@ -54,24 +54,20 @@ spl_autoload_register(
 	}
 );
 
+$supplang_lang_tax = new Supplang_Language_Taxonomy();
+
 /**
  * --- LOAD ACTIVATION/DEACTIVATION HOOKS ---
  */
 
-register_activation_hook(
-	__FILE__,
-	function() {
-		$supplang_lang_tax = new Supplang_Language_Taxonomy();
-		$supplang_lang_tax->activate();
-	}
-);
+register_activation_hook( __FILE__, array( $supplang_lang_tax, 'activate' ) );
+register_deactivation_hook( __FILE__, array( $supplang_lang_tax, 'deactivate' ) );
 
 /**
  * --- LOAD PLUGIN FILES ---
  */
 
 // Register custom taxonomy
-$supplang_lang_tax = new Supplang_Language_Taxonomy();
 add_action( 'init', array( $supplang_lang_tax, 'register_taxonomy' ) );
 add_action( 'restrict_manage_posts', array( $supplang_lang_tax, 'add_admin_filter_dropdown' ) );
 add_filter( 'parse_query', array( $supplang_lang_tax, 'admin_filter_posts' ) );
