@@ -1,1 +1,13 @@
+# Project folders
 vendor/
+node_modules/
+
+# Temporary files
+.DS_Store
+
+# Log files
+npm-debug.log
+
+# Language backup files
+**/*.po~
+**/*.pot~

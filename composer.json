@@ -1,0 +1,25 @@
+{
+  "name": "mei/supplang",
+  "description": "A WordPress plugin that allows switching the language of a theme without medeling with the language of the content",
+  "keywords": ["mei", "plugin", "language", "internationalization", "translation"],
+  "license": "MIT",
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=5.2.4"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "3.*",
+    "wp-coding-standards/wpcs": "0.14.*"
+  },
+  "scripts": {
+    "post-update-cmd": [
+      "phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs"
+    ],
+    "lint": [
+      "phpcs --standard=.phpcs.xml ./"
+    ],
+    "lint:fix": [
+      "phpcbf --standard=.phpcs.xml ./"
+    ]
+  }
+}
