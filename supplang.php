@@ -76,9 +76,6 @@ add_action( 'init', array( $supplang_lang_tax, 'register_taxonomy' ) );
 add_action( 'restrict_manage_posts', array( $supplang_lang_tax, 'add_admin_filter_dropdown' ) );
 add_filter( 'parse_query', array( $supplang_lang_tax, 'admin_filter_posts' ) );
 
-// Load the admin setting page
-// if ( is_admin() ) require_once 'admin/register-settings.php';
-
 // Load the define locale mechanism
 require_once 'includes/define-locale.php';
 
