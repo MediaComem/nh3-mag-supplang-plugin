@@ -18,23 +18,23 @@ if ( ! function_exists( 'supplang_define_locale' ) ) {
 			return;
 		}
 
-		$localeWhitelist = array_map(
+		$locale_whitelist = array_map(
 			function( $language ) {
 				return $language['locale'];
-			}, SL_LANGUAGES
+			}, SUPPLANG_LANGUAGES
 		);
 
-		$localePost   = in_array( $_POST[ SL_UIL_POST_PARAM ], $localeWhitelist ) ? $_POST[ SL_UIL_POST_PARAM ] : null;
-		$localeCookie = in_array( $_COOKIE[ SL_UIL_COOKIE_NAME ], $localeWhitelist ) ? $_COOKIE[ SL_UIL_COOKIE_NAME ] : null;
+		$locale_post   = in_array( $_POST[ SUPPLANG_UIL_POST_PARAM ], $locale_whitelist, true ) ? $_POST[ SUPPLANG_UIL_POST_PARAM ] : null;
+		$locale_cookie = in_array( $_COOKIE[ SUPPLANG_UIL_COOKIE_NAME ], $locale_whitelist, true ) ? $_COOKIE[ SUPPLANG_UIL_COOKIE_NAME ] : null;
 
-		$locale = $localePost ? $localePost : $localeCookie;
+		$locale = $locale_post ? $locale_post : $locale_cookie;
 
-		if ( $locale && ( ! $localeCookie || $locale !== $localeCookie ) ) {
-			setcookie( SL_UIL_COOKIE_NAME, $locale, time() + DAY_IN_SECONDS * 30, COOKIEPATH, COOKIE_DOMAIN );
+		if ( $locale && ( ! $locale_cookie || $locale !== $locale_cookie ) ) {
+			setcookie( SUPPLANG_UIL_COOKIE_NAME, $locale, time() + DAY_IN_SECONDS * 30, COOKIEPATH, COOKIE_DOMAIN );
 			// We need to force set the cookie in the $_COOKIE array because the hook that triggers this function
 			// is called executed several time when WordPress constructs the page. This is to prevent sending the same
 			// cookie multiple time.
-			$_COOKIE[ SL_UIL_COOKIE_NAME ] = $locale;
+			$_COOKIE[ SUPPLANG_UIL_COOKIE_NAME ] = $locale;
 		}
 
 		return $locale;

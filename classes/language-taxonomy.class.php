@@ -10,7 +10,7 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 		public $tax_name;
 
 		public function __construct() {
-			$this->tax_name = defined( SL_LANG_TAX_ID ) ? SL_LANG_TAX_ID : 'supplang_lang';
+			$this->tax_name = defined( SUPPLANG_LANG_TAX_ID ) ? SUPPLANG_LANG_TAX_ID : 'supplang_lang';
 		}
 
 		/**
@@ -100,7 +100,7 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 		public function add_admin_filter_dropdown() {
 			global $typenow;
 			$post_type = 'post';
-			if ( $typenow == $post_type ) {
+			if ( $typenow === $post_type ) {
 				$selected      = isset( $_GET[ $this->tax_name ] ) ? $_GET[ $this->tax_name ] : '';
 				$info_taxonomy = get_taxonomy( $this->tax_name );
 				wp_dropdown_categories(
@@ -125,9 +125,9 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 		public function admin_filter_posts() {
 			global $pagenow;
 			$post_type      = 'post';
-			$this->tax_name = SL_LANG_TAX_ID;
+			$this->tax_name = SUPPLANG_LANG_TAX_ID;
 			$q_vars         = &$query->query_vars;
-			if ( $pagenow == 'edit.php' && isset( $q_vars['post_type'] ) && $q_vars['post_type'] == $post_type && isset( $q_vars[ $this->tax_name ] ) && is_numeric( $q_vars[ $this->tax_name ] ) && $q_vars[ $this->tax_name ] != 0 ) {
+			if ( 'edit.php' === $pagenow && isset( $q_vars['post_type'] ) && $q_vars['post_type'] === $post_type && isset( $q_vars[ $this->tax_name ] ) && is_numeric( $q_vars[ $this->tax_name ] ) && 0 !== $q_vars[ $this->tax_name ] ) {
 				$term                      = get_term_by( 'id', $q_vars[ $this->tax_name ], $this->tax_name );
 				$q_vars[ $this->tax_name ] = $term->slug;
 			}

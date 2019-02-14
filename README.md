@@ -23,5 +23,5 @@ To change the language, you can send a POST request on the current URL, sending 
 You can also use a special function in your templates that displays a select list of the available languages and send the POST request for you. To do so, use this function somewhere in your templates:
 
 ```php
-sl_languages_selector();
+SUPPLANG_LANGUAGES_selector();
 ```

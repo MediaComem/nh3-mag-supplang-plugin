@@ -13,17 +13,17 @@
  * --- DEFINE PLUGIN CONSTANTS ---
  */
 // Name of the POST param used for switching languages
-define( SL_UIL_POST_PARAM, 'supplang-uil' );
+define( SUPPLANG_UIL_POST_PARAM, 'supplang-uil' );
 // Name of the cookie used to save the user langauge choice
-define( SL_UIL_COOKIE_NAME, 'supplang-uil' );
+define( SUPPLANG_UIL_COOKIE_NAME, 'supplang-uil' );
 // ID for the custom taxonomy
-define( SL_LANG_TAX_ID, 'supplang_lang' );
+define( SUPPLANG_LANG_TAX_ID, 'supplang_lang' );
 // Prefix that should be used by all plugin classes
-define( SL_CLASS_PREFIX, 'Supplang' );
+define( SUPPLANG_CLASS_PREFIX, 'Supplang' );
 // List of available languages
 // Add a new array to add a new language
 define(
-	SL_LANGUAGES, array(
+	SUPPLANG_LANGUAGES, array(
 		array(
 			'name'   => 'Français',
 			'locale' => 'fr_FR',
@@ -45,7 +45,7 @@ define(
 spl_autoload_register(
 	function( $class_name ) {
 		$class_name_parts = explode( '_', $class_name );
-		if ( $class_name_parts[0] === SL_CLASS_PREFIX ) {
+		if ( SUPPLANG_CLASS_PREFIX === $class_name_parts[0] ) {
 			array_shift( $class_name_parts );
 			$classes_dir = realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR;
 			$class_file  = strtolower( implode( '-', $class_name_parts ) . '.class.php' );
