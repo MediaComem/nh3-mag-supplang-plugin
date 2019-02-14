@@ -20,17 +20,17 @@ if ( !function_exists( 'supplang_define_locale' ) ) {
       return $language['locale'];
     }, SL_LANGUAGES );
 
-    $localePost = in_array( $_POST[SL_UIL_NAME], $localeWhitelist ) ? $_POST[SL_UIL_NAME] : null;
-    $localeCookie = in_array( $_COOKIE[SL_UIL_NAME], $localeWhitelist ) ? $_COOKIE[SL_UIL_NAME] : null;
+    $localePost = in_array( $_POST[SL_UIL_POST_PARAM], $localeWhitelist ) ? $_POST[SL_UIL_POST_PARAM] : null;
+    $localeCookie = in_array( $_COOKIE[SL_UIL_COOKIE_NAME], $localeWhitelist ) ? $_COOKIE[SL_UIL_COOKIE_NAME] : null;
 
     $locale = $localePost ? $localePost : $localeCookie;
 
     if ( $locale && ( !$localeCookie || $locale !== $localeCookie ) ) {
-      setcookie( SL_UIL_NAME, $locale, time() + DAY_IN_SECONDS * 30, COOKIEPATH, COOKIE_DOMAIN );
+      setcookie( SL_UIL_COOKIE_NAME, $locale, time() + DAY_IN_SECONDS * 30, COOKIEPATH, COOKIE_DOMAIN );
       // We need to force set the cookie in the $_COOKIE array because the hook that triggers this function
       // is called executed several time when WordPress constructs the page. This is to prevent sending the same
       // cookie multiple time.
-      $_COOKIE[SL_UIL_NAME] = $locale;
+      $_COOKIE[SL_UIL_COOKIE_NAME] = $locale;
     }
 
     return $locale;
