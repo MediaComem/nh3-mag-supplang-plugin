@@ -132,15 +132,15 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 		 * @author  Mike Hemberger
 		 * @link http://thestizmedia.com/custom-post-type-filter-admin-custom-taxonomy/
 		 */
-		public function admin_filter_posts() {
+		public function admin_filter_posts( $query ) {
 			global $pagenow;
 			$post_type      = 'post';
 			$this->tax_name = SUPPLANG_LANG_TAX_ID;
-			$q_vars         = &$query->query_vars;
+      $q_vars         = &$query->query_vars;
 			if ( 'edit.php' === $pagenow && isset( $q_vars['post_type'] ) && $q_vars['post_type'] === $post_type && isset( $q_vars[ $this->tax_name ] ) && is_numeric( $q_vars[ $this->tax_name ] ) && 0 !== $q_vars[ $this->tax_name ] ) {
-				$term                      = get_term_by( 'id', $q_vars[ $this->tax_name ], $this->tax_name );
+        $term                      = get_term_by( 'id', $q_vars[ $this->tax_name ], $this->tax_name );
 				$q_vars[ $this->tax_name ] = $term->slug;
-			}
+      }
 		}
 
 	}
