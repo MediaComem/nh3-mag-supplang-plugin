@@ -16,22 +16,22 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 		/**
 		 * Called when the plugin is activated.
 		 * Registers the Language custom taxonomy and insert the default values.
-     * Flush the rewrite rules to add new taxonomy url.
+	 * Flush the rewrite rules to add new taxonomy url.
 		 * @author Mathias Oberson
 		 */
 		public function activate() {
 			$this->register_taxonomy();
-      $this->add_default_values();
-      flush_rewrite_rules();
-    }
+			$this->add_default_values();
+			flush_rewrite_rules();
+		}
 
-    /**
-     * Called when the plugin is deactivated.
-     * Currently only flush the rewrite rules to account for the taxonomy not being registered.
-     */
-    public function deactivate() {
-      flush_rewrite_rules();
-    }
+		/**
+		 * Called when the plugin is deactivated.
+		 * Currently only flush the rewrite rules to account for the taxonomy not being registered.
+		 */
+		public function deactivate() {
+			flush_rewrite_rules();
+		}
 
 		/**
 		 * Add four default languages in the Language custom taxonomy
@@ -136,11 +136,11 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 			global $pagenow;
 			$post_type      = 'post';
 			$this->tax_name = SUPPLANG_LANG_TAX_ID;
-      $q_vars         = &$query->query_vars;
+			$q_vars         = &$query->query_vars;
 			if ( 'edit.php' === $pagenow && isset( $q_vars['post_type'] ) && $q_vars['post_type'] === $post_type && isset( $q_vars[ $this->tax_name ] ) && is_numeric( $q_vars[ $this->tax_name ] ) && 0 !== $q_vars[ $this->tax_name ] ) {
-        $term                      = get_term_by( 'id', $q_vars[ $this->tax_name ], $this->tax_name );
+				$term                      = get_term_by( 'id', $q_vars[ $this->tax_name ], $this->tax_name );
 				$q_vars[ $this->tax_name ] = $term->slug;
-      }
+			}
 		}
 
 	}

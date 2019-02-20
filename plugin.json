@@ -1,0 +1,10 @@
+{
+    "pluginName": "Supplang",
+    "description": "Flexible language manager that allows for a complete separation between UI language and content language.",
+    "version": "0.1.0",
+    "author": "Mathias Oberson - MEI",
+    "authorUri": "https://heig-vd.ch/rad/instituts/mei/",
+    "textDomain": "supplang",
+    "domainPath": "/languages",
+    "bootstrapFilePath": "bootstrap.php"
+}

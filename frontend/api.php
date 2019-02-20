@@ -12,5 +12,5 @@ function supplang_switcher() {
  * * `locale` - The name of the WordPress locale for this language
  */
 function supplang_languages() {
-  return SUPPLANG_LANGUAGES;
+	return SUPPLANG_LANGUAGES;
 }

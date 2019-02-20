@@ -1,6 +1,6 @@
 # NH3 Language Switcher
 
-This is a WordPress plugin that allows switching the language of a theme without medeling with the language of the content.
+This is a WordPress plugin that adds switching the language of a theme without medeling with the language of the content.
 
 ## Settings
 

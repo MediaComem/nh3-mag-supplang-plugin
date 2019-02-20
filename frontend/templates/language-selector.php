@@ -1,8 +1,8 @@
 <script>
 	jQuery( document ).ready(function( $ ) {
-    $('#supplang-selector-select').on('change', function() {
-      $('#supplang-selector').submit();
-    });
+	$('#supplang-selector-select').on('change', function() {
+	  $('#supplang-selector').submit();
+	});
 	});
 </script>
 <div id="supplang-selector-wrapper">
