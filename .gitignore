@@ -11,3 +11,6 @@ npm-debug.log
 # Language backup files
 **/*.po~
 **/*.pot~
+
+releases/
+**/*.zip
