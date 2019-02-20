@@ -46,6 +46,11 @@ class Releases {
       ]);
       // Update the plugin config
       self::updatePluginConfigVersion($versions['current']);
+      // TODO: Regenerate the plugin header file
+      exec('composer plugin-header');
+      // Make new commit
+      exec('git add .');
+      exec('git commit -m "Release new '.$type.' version - '.$versions['current'].'"');
       // Zip folder
       $zipName = strtolower(loadConfigFile()->pluginName)."_".$versions['current'];
       self::makeZipFolder($zipName);
