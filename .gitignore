@@ -12,5 +12,7 @@ npm-debug.log
 **/*.po~
 **/*.pot~
 
+# Releases
 releases/
+.release.conf
 **/*.zip
