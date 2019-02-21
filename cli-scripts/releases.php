@@ -11,6 +11,11 @@ class Releases {
 
   const WHITELIST = ['major', 'minor', 'patch'];
 
+  public static function conf() {
+    exec('git status', $res);
+    var_dump($res);
+  }
+
   /**
    * Main process of creating a new Release, using semver notation.
    * This function should be called via a Composer script.
@@ -136,5 +141,9 @@ class Releases {
     $config->version = str_replace('v', '', $current_version);
     file_put_contents('plugin.json', json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     write("SUCCESS - Plugin config version has been updated to $current_version");
+  }
+
+  private static function getReleaseConfig() {
+    return parse_ini_file('.release.conf', true);
   }
 }
