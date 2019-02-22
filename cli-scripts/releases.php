@@ -57,8 +57,7 @@ class Releases {
       exec('git add .');
       exec('git commit -m "Release new '.$type.' version - '.$versions['current'].'"');
       // Zip folder
-      $zipName = strtolower(loadConfigFile()->pluginName)."_".$versions['current'];
-      self::makeZipFolder($zipName);
+      self::makeZipFolder($versions['current']);
       // Add new tag with the new version
       exec("git tag ".$versions['current']);
       write('SUCCESS - New git tag "'.$versions['current'].'" created.');
