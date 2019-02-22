@@ -113,23 +113,29 @@ class Releases {
   /**
    * Creates the zip folder for the release
    */
-  private static function makeZipFolder(string $zipName) {
+  private static function makeZipFolder(string $version) {
+    $pluginName = strtolower(loadConfigFile()->pluginName);
+    $zipName = "{$pluginName}_{$version}.zip";
     $zipFile = new \PhpZip\ZipFile();
+    $dirPaths = [
+      'frontend',
+      'classes',
+      'includes',
+      'languages',
+    ];
     try {
+      $zipFile->addFilesFromGlob('.', '*.php', "$pluginName/");
+      foreach ($dirPaths as $dir) {
+        $zipFile->addDirRecursive($dir, "$pluginName/$dir");
+      }
       $zipFile
-        ->addFile("supplang.php")
-        ->addFile("bootstrap.php")
-        ->addDirRecursive("frontend", "frontend")
-        ->addDirRecursive("classes", "classes")
-        ->addDirRecursive("includes", "includes")
-        ->addDirRecursive("languages", "languages")
-        ->saveAsFile("releases/$zipName.zip")
+        ->saveAsFile("releases/$zipName")
         ->close();
     } catch (\PhpZip\Exception\ZipException $e) {
       write("ERROR --- Error while creating the zipfile.");
     } finally {
       $zipFile->close();
-      write("SUCCESS - New release created at releases/$zipName.zip");
+      write("SUCCESS - New release created at releases/$zipName");
     }
   }
 
