@@ -38,25 +38,7 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 		 * @author Mathias Oberson
 		 */
 		public function add_default_values() {
-			$default_values = array(
-				array(
-					'name' => 'Français',
-					'desc' => 'Apply this to french written articles',
-					'slug' => 'fr',
-				),
-				array(
-					'name' => 'Italiano',
-					'desc' => 'Apply this to italian written articles',
-					'slug' => 'it',
-				),
-				array(
-					'name' => 'Rumansch',
-					'desc' => 'Apply this to romansch written articles',
-					'slug' => 'rm',
-				),
-			);
-
-			foreach ( $default_values as $value ) {
+			foreach ( SUPPLANG_LANGUAGES as $value ) {
 				if ( ! term_exists( $value['name'], $this->tax_name ) ) {
 					wp_insert_term(
 						$value['name'],

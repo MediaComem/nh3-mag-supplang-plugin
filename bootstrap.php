@@ -20,16 +20,22 @@ define(
 	SUPPLANG_LANGUAGES, array(
 		array(
 			'name'   => 'Français',
-			'locale' => 'fr_FR',
+      'locale' => 'fr_FR',
+      'desc'   => 'Apply this to french written articles',
+      'slug'   => 'fr',
 		),
 		array(
 			'name'   => 'Italiano',
 			'locale' => 'it_IT',
-		),
+      'desc'   => 'Apply this to italian written articles',
+      'slug'   => 'it',
+    ),
 		array(
 			'name'   => 'Rumansch',
 			'locale' => 'rm_CH',
-		),
+      'desc'   => 'Apply this to romansch written articles',
+      'slug'   => 'rm',
+    ),
 	)
 );
 
