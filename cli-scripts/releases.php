@@ -12,8 +12,20 @@ class Releases {
   const WHITELIST = ['major', 'minor', 'patch'];
 
   public static function conf() {
-    exec('git status', $res);
-    var_dump($res);
+    exec('git status --procelain', $status);
+    if (sizeof($status) !== 0 ) {
+      write([
+        'ERROR --- You have unstaged changes in your repository...',
+        'INFO ---- Please commit or stash them and retry.',
+      ]);
+    }
+    exec('git log @{u}..', $commits);
+    if (sizeof($commits) !== 0 ) {
+      write([
+        'ERROR --- You have local commits that are not pushed to remote branch.',
+        'INFO ---- Please push your local commits and retry.'
+      ]);
+    }
   }
 
   /**
