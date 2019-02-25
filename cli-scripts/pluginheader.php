@@ -17,16 +17,8 @@ Class PluginHeader {
    */
   public static function generate() {
     write();
-    self::loadConfigFile();
+    loadConfigFile();
     self::makeFile();
-  }
-
-  /**
-   * Load the plugin configuration file.
-   * The file MUST be named `plugin.json` and be stored at the root of your plugin folder.
-   */
-  private static function loadConfigFile() {
-    self::$config = json_decode(file_get_contents('plugin.json'));
   }
 
   /**
