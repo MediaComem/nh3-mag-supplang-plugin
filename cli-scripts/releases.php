@@ -27,18 +27,18 @@ class Releases {
     $type = $args[0];
     // Incorrect number of arguments
     if ( sizeof($args) === 0 || sizeof($args) > 1 ) {
-      write([
-        "ERROR --- ".self::acceptedArgs(),
-        "ERROR --- You provided ".sizeof($args)." argument".(sizeof($args) === 0 ? '' : 's')."."
+      return write([
+        "ERROR --- You provided ".sizeof($args)." argument".(sizeof($args) === 0 ? '' : 's').".",
+        "INFO ---- ".self::acceptedArgs(),
       ]);
     // Invalid argument
     } elseif (!in_array($type, self::WHITELIST)) {
-      write([
+      return write([
         "ERROR --- The provided argument, \"$type\", is not a valid argument.",
         "INFO ---- ".self::acceptedArgs()
       ]);
     // Making release
-    } else {
+    } elseif (self::checkGitStatus()) {
       // Get the new version based on given argument (major, minor, patch)
       $versions = self::bumpVersionNumberTo($type);
       write([
@@ -138,6 +138,7 @@ class Releases {
 
     $options = [
       CURLOPT_URL => "{$config['gitlab']['api_endpoint']}/projects/{$config['gitlab']['project_id']}/releases",
+      CURLOPT_RETURNTRANSFER => true,
       CURLOPT_HTTPHEADER => [
         'Content-Type: application/json',
         "PRIVATE-TOKEN: {$config['gitlab']['private_token']}",
@@ -170,7 +171,7 @@ class Releases {
    * TODO: Generate the list from the WHITELIST constant
    */
   private static function acceptedArgs() {
-    return 'The "release" script requires one argument among the following ones : "major", "minor" or "patch".';
+    return 'The release script requires one argument among the following ones : "major", "minor" or "patch".';
   }
 
   /**
@@ -262,6 +263,11 @@ class Releases {
     return parse_ini_file('.release.conf', true);
   }
 
+  /**
+   * Performs status checks on the repository.
+   * Ensure that there is no unstaged changes and no unpushed commits.
+   * @return Boolean True if all checks passed, False otherwise.
+   */
   private static function checkGitStatus() {
     exec('git status --porcelain', $status);
     if (sizeof($status) !== 0 ) {
@@ -269,6 +275,7 @@ class Releases {
         'ERROR --- You have unstaged changes in your repository...',
         'INFO ---- Please commit or stash them and retry.',
       ]);
+      return false;
     }
     exec('git log @{u}..', $commits);
     if (sizeof($commits) !== 0 ) {
@@ -276,6 +283,8 @@ class Releases {
         'ERROR --- You have local commits that are not pushed to remote branch...',
         'INFO ---- Please push your local commits and retry.'
       ]);
+      return false;
     }
+    return true;
   }
 }
