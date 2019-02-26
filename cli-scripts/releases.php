@@ -234,14 +234,14 @@ class Releases {
         $zipFile->addDirRecursive($dir, "$pluginName/$dir");
       }
       $zipFile
-        ->saveAsFile("releases/$zipName")
+        ->saveAsFile($zipPath)
         ->close();
     } catch (\PhpZip\Exception\ZipException $e) {
       write("ERROR --- Error while creating the zipfile.");
       $zipPath = false;
     } finally {
       $zipFile->close();
-      write("SUCCESS - New release created at releases/$zipName");
+      write("SUCCESS - New release zip file created at $zipPath");
     }
     return $zipPath;
   }
