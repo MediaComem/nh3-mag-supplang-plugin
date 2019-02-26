@@ -25,3 +25,14 @@ You can also use a special function in your templates that displays a select lis
 ```php
 SUPPLANG_LANGUAGES_selector();
 ```
+# Development
+
+## Release
+
+cURL SSL certificate error resolution:
+* Download the `cacert.pem` file from https://curl.haxx.se/docs/caextract.html
+* Place the file on your server (like `C:\MAMP\cacert.pem`)
+* Update the `php.ini` file with_
+  curl.cainfo="C:\MAMP\cacert.pem"
+  openssl.cafile="C:\MAMP\cacert.pem"
+* Restart server
