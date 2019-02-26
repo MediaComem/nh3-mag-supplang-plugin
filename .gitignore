@@ -16,3 +16,6 @@ npm-debug.log
 releases/
 .release.conf
 **/*.zip
+
+# Misc
+curl.txt
