@@ -16,7 +16,7 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 		/**
 		 * Called when the plugin is activated.
 		 * Registers the Language custom taxonomy and insert the default values.
-	 * Flush the rewrite rules to add new taxonomy url.
+	   * Flush the rewrite rules to add new taxonomy url.
 		 * @author Mathias Oberson
 		 */
 		public function activate() {

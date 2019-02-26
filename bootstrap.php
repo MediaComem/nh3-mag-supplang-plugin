@@ -60,8 +60,8 @@ $supplang_lang_tax = new Supplang_Language_Taxonomy();
  * --- LOAD ACTIVATION/DEACTIVATION HOOKS ---
  */
 
-register_activation_hook( __FILE__, array( $supplang_lang_tax, 'activate' ) );
-register_deactivation_hook( __FILE__, array( $supplang_lang_tax, 'deactivate' ) );
+register_activation_hook( SUPPLANG_MAIN_FILE, array( $supplang_lang_tax, 'activate' ) );
+register_deactivation_hook( SUPPLANG_MAIN_FILE, array( $supplang_lang_tax, 'deactivate' ) );
 
 /**
  * --- LOAD PLUGIN FILES ---
