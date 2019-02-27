@@ -13,7 +13,7 @@
 // DO NOT ALTER ITS CONTENT
 
 // Main plugin file path
-define(SUPPLANG_MAIN_FILE, __FILE__);
+define('SUPPLANG_MAIN_FILE', __FILE__);
 
 // Bootstrap the plugin.
 require_once 'bootstrap.php';

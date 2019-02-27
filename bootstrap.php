@@ -7,17 +7,21 @@
  * --- DEFINE PLUGIN CONSTANTS ---
  */
 // Name of the POST param used for switching languages
-define( SUPPLANG_UIL_POST_PARAM, 'supplang-uil' );
+define( 'SUPPLANG_UIL_POST_PARAM', 'supplang-uil' );
 // Name of the cookie used to save the user langauge choice
-define( SUPPLANG_UIL_COOKIE_NAME, 'supplang-uil' );
+define( 'SUPPLANG_UIL_COOKIE_NAME', 'supplang-uil' );
 // ID for the custom taxonomy
-define( SUPPLANG_LANG_TAX_ID, 'supplang_lang' );
+define( 'SUPPLANG_LANG_TAX_ID', 'supplang_lang' );
 // Prefix that should be used by all plugin classes
-define( SUPPLANG_CLASS_PREFIX, 'Supplang' );
+define( 'SUPPLANG_CLASS_PREFIX', 'Supplang' );
+// Name of the Supplang option group
+define( 'SUPPLANG_OPTION_GROUP', 'supplang');
+// Name of the setting that list available languages for the site UI
+define( 'SUPPLANG_AVAILABLE_UIL', 'supplang_available_uil');
 // List of available languages
 // Add a new array to add a new language
 define(
-	SUPPLANG_LANGUAGES, array(
+	'SUPPLANG_LANGUAGES', array(
 		array(
 			'name'   => 'Français',
       'locale' => 'fr_FR',
