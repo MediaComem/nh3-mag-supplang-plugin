@@ -40,6 +40,18 @@ define(
       'desc'   => 'Apply this to romansch written articles',
       'slug'   => 'rm',
     ),
+		array(
+			'name'   => 'English',
+			'locale' => 'en_GB',
+      'desc'   => 'Apply this to english written articles',
+      'slug'   => 'en',
+    ),
+		array(
+			'name'   => 'Deutsch',
+			'locale' => 'de_DE',
+      'desc'   => 'Apply this to german written articles',
+      'slug'   => 'de',
+    ),
 	)
 );
 
