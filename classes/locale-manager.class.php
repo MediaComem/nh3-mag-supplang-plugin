@@ -8,7 +8,7 @@ if ( ! class_exists( 'Supplang_Locale_Manager' ) ) {
     const COOKIE_NAME = 'supplang';
 
     public function __construct() {
-      add_filter( 'locale', array( $this, 'supplang_define_locale' ) );
+      add_filter( 'locale', array( $this, 'define_frontend_locale' ) );
     }
 
     /**
@@ -21,7 +21,7 @@ if ( ! class_exists( 'Supplang_Locale_Manager' ) ) {
      *
      * @return `null` if no locale could be found or it was not an available locale ; otherwise return the locale value.
      */
-    public function supplang_define_locale() {
+    public function define_frontend_locale() {
 
       // Prevent PHP Warnings
       if (!isset($_GET[SUPPLANG_GET_PARAM])) $_GET[SUPPLANG_GET_PARAM] = null;
