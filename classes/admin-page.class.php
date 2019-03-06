@@ -38,7 +38,7 @@ if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
     public function register_setting_section() {
       add_settings_section(
         self::SECTION_NAME,
-        __('User Interface Languages'),
+        __('User Interface Languages', 'supplang'),
         $this->load_template('settings-section'),
         SUPPLANG_ADMIN_PAGE_NAME
       );

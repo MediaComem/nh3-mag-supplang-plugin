@@ -8,7 +8,7 @@
     <?php echo array_key_exists( $lang['locale'], $option_values) ? 'checked' : '' ?>
     value="1"><?php echo $lang['name']; ?></label>
     <?php if ( isset( $lang['loco_link'] ) ): ?>
-      <a href="<?= $lang['loco_link'] ?>"><?= __('See translation state', '') ?></a>
+      <a href="<?= $lang['loco_link'] ?>"><?= __('See translation state', 'supplang') ?></a>
     <?php endif; ?>
     <br>
   <?php endforeach; ?>
