@@ -89,6 +89,14 @@ add_action( 'restrict_manage_posts', array( $supplang_lang_tax, 'add_admin_filte
 add_filter( 'parse_query', array( $supplang_lang_tax, 'admin_filter_posts' ) );
 
 /**
+ * --- LOAD TEXT DOMAIN ---
+ */
+add_action( 'init', function() {
+  load_plugin_textdomain( 'supplang', null, '/supplang/languages' );
+});
+
+
+/**
  * --- LOAD PLUGIN FILES ---
  */
 
