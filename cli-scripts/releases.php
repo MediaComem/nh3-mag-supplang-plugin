@@ -222,9 +222,9 @@ class Releases {
     $zipFile = new \PhpZip\ZipFile();
     // List of directories which content will be added to the zip
     $dirPaths = [
-      'frontend',
+      'admin',
       'classes',
-      'includes',
+      'frontend',
       'languages',
     ];
     try {
