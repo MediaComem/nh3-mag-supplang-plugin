@@ -1,0 +1,119 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Supplang\n"
+"POT-Creation-Date: 2019-03-01 15:36+0100\n"
+"PO-Revision-Date: 2019-03-01 15:27+0000\n"
+"Last-Translator: mathias.oberson@heig-vd.ch <mathias.oberson@heig-vd.ch>\n"
+"Language-Team: \n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-KeywordsList: __;_e;_x;esc_html__;esc_html_e;esc_html_x\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: .git\n"
+"X-Poedit-SearchPathExcluded-1: .vscode\n"
+"X-Poedit-SearchPathExcluded-2: languages\n"
+"X-Poedit-SearchPathExcluded-3: releases\n"
+"X-Poedit-SearchPathExcluded-4: vendor\n"
+"Report-Msgid-Bugs-To: \n"
+"X-Loco-Version: 2.2.0; wp-5.0.3"
+
+#: admin/templates/admin-settings-lang-field.php:11
+msgid "See translation state"
+msgstr ""
+
+#: admin/templates/admin-settings-lang-field.php:15
+msgid ""
+"Use the checkbox before each language to enable or disable it for your users."
+msgstr ""
+
+#: admin/templates/admin-settings-page.php:11
+msgid "Save Settings"
+msgstr ""
+
+#: admin/templates/admin-settings-section.php:1
+msgid ""
+"This is the list of the supported user interface languages for your site."
+msgstr ""
+
+#: admin/templates/admin-settings-section.php:2
+msgid ""
+"Each enabled language will be available to your users for them to choose it "
+"as their browsing language."
+msgstr ""
+
+#: admin/templates/admin-settings-section.php:3
+msgid "Note:"
+msgstr ""
+
+#: admin/templates/admin-settings-section.php:3
+msgid ""
+"If you enable a language but do not have a site translation in this language "
+"or only an incomplete translation, all the untranslated texts will display "
+"in English."
+msgstr ""
+
+#: classes/admin-page.class.php:30
+msgid "Site Languages Settings"
+msgstr ""
+
+#: classes/admin-page.class.php:31
+msgid "Site Languages"
+msgstr ""
+
+#: classes/admin-page.class.php:41
+msgid "User Interface Languages"
+msgstr ""
+
+#: classes/admin-page.class.php:50
+msgid "Users can display the site in..."
+msgstr ""
+
+#: classes/language-taxonomy.class.php:61
+msgid "Languages"
+msgstr ""
+
+#: classes/language-taxonomy.class.php:62
+#: classes/language-taxonomy.class.php:71
+msgid "Language"
+msgstr ""
+
+#: classes/language-taxonomy.class.php:63
+msgid "Search Languages"
+msgstr ""
+
+#: classes/language-taxonomy.class.php:64
+msgid "All Languages"
+msgstr ""
+
+#: classes/language-taxonomy.class.php:65
+msgid "Parent Language"
+msgstr ""
+
+#: classes/language-taxonomy.class.php:66
+msgid "Parent Language:"
+msgstr ""
+
+#: classes/language-taxonomy.class.php:67
+msgid "Edit Language"
+msgstr ""
+
+#: classes/language-taxonomy.class.php:68
+msgid "Update Language"
+msgstr ""
+
+#: classes/language-taxonomy.class.php:69
+msgid "Add New Language"
+msgstr ""
+
+#: classes/language-taxonomy.class.php:70
+msgid "New Language Name"
+msgstr ""
+
+#: classes/language-taxonomy.class.php:100
+msgid "Show All Languages"
+msgstr ""
