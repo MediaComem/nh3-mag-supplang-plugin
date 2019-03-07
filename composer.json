@@ -27,9 +27,6 @@
     ],
     "plugin-header": [
       "CliScripts\\PluginHeader::generate"
-    ],
-    "rconf": [
-      "CliScripts\\Releases::conf"
     ]
   },
   "autoload": {

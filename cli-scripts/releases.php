@@ -209,6 +209,10 @@ class Releases {
     return $version;
   }
 
+  public static function testZip() {
+    self::makeZipFolder('v0.0.0');
+  }
+
   /**
    * Creates the zip folder for the release.
    * The resulting zip will be named after the plugin and the version number.
@@ -225,7 +229,6 @@ class Releases {
       'admin',
       'classes',
       'frontend',
-      'languages',
     ];
     try {
       // Add all php files at the root of the plugin
@@ -233,6 +236,7 @@ class Releases {
       foreach ($dirPaths as $dir) {
         $zipFile->addDirRecursive($dir, "$pluginName/$dir");
       }
+      $zipFile->addFilesFromGlob('./languages', '*.po', "$pluginName/languages");
       $zipFile
         ->saveAsFile($zipPath)
         ->close();

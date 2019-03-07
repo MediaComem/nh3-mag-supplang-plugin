@@ -31,7 +31,7 @@ if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
         __('Site Languages', 'supplang'),
         'manage_options',
         SUPPLANG_ADMIN_PAGE_NAME,
-        $this->load_template('admin-settings-page')
+        $this->load_template('settings-page')
       );
     }
 
@@ -39,7 +39,7 @@ if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
       add_settings_section(
         self::SECTION_NAME,
         __('User Interface Languages'),
-        $this->load_template('admin-settings-section'),
+        $this->load_template('settings-section'),
         SUPPLANG_ADMIN_PAGE_NAME
       );
     }
@@ -48,7 +48,7 @@ if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
       add_settings_field(
         'supplang_available_languages',
         __('Users can display the site in...', 'supplang'),
-        $this->load_template("admin-settings-lang-field"),
+        $this->load_template('settings-languages-fieldset'),
         SUPPLANG_ADMIN_PAGE_NAME,
         self::SECTION_NAME,
         [
