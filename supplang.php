@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Supplang
  * Description: Flexible language manager that allows for a complete separation between UI language and content language.
- * Version:     2.0.0
+ * Version:     2.0.1
  * Author:      Mathias Oberson - MEI
  * Author URI:  https://heig-vd.ch/rad/instituts/mei/
  * Text Domain: supplang
