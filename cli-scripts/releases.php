@@ -5,6 +5,7 @@ namespace CliScripts;
 use Composer\Script\Event;
 use Composer\Installer\PackageEvent;
 use \CurlFile;
+use \ZipArchive;
 
 include_once 'utils.php';
 
@@ -209,10 +210,6 @@ class Releases {
     return $version;
   }
 
-  public static function testZip() {
-    self::makeZipFolder('v0.0.0');
-  }
-
   /**
    * Creates the zip folder for the release.
    * The resulting zip will be named after the plugin and the version number.
@@ -221,31 +218,23 @@ class Releases {
    */
   private static function makeZipFolder(string $version) {
     $pluginName = strtolower(loadConfigFile()->pluginName);
+    $config = self::getReleaseConfig();
     $zipName = "{$pluginName}_{$version}.zip";
     $zipPath = "releases/$zipName";
-    $zipFile = new \PhpZip\ZipFile();
-    // List of directories which content will be added to the zip
-    $dirPaths = [
-      'admin',
-      'classes',
-      'frontend',
-    ];
     try {
-      // Add all php files at the root of the plugin
-      $zipFile->addFilesFromGlob('.', '*.php', "$pluginName/");
-      foreach ($dirPaths as $dir) {
-        $zipFile->addDirRecursive($dir, "$pluginName/$dir");
+      $zip = new ZipArchive();
+      if ($zip->open($zipPath, ZipArchive::CREATE) !== TRUE) {
+        throw new Exception("cannot open <$zipPath>\n");
       }
-      $zipFile->addFilesFromGlob('./languages', '*.po', "$pluginName/languages");
-      $zipFile
-        ->saveAsFile($zipPath)
-        ->close();
-    } catch (\PhpZip\Exception\ZipException $e) {
+      foreach ($config['zip_content']['files'] as $glob) {
+        $zip->addGlob($glob, GLOB_BRACE);
+      }
+      write("INFO ---- $zip->numFiles file(s) added to the zip.");
+      $zip->close();
+      write("SUCCESS - New release zip file created at $zipPath");
+    } catch (\Exception $e) {
       write("ERROR --- Error while creating the zipfile.");
       $zipPath = false;
-    } finally {
-      $zipFile->close();
-      write("SUCCESS - New release zip file created at $zipPath");
     }
     return $zipPath;
   }
