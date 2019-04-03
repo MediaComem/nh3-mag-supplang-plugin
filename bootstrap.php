@@ -6,6 +6,8 @@
 /**
  * --- DEFINE PLUGIN CONSTANTS ---
  */
+// Plugin name
+define( 'SUPPLANG_NAME', 'supplang');
 // ID for the custom taxonomy
 define( 'SUPPLANG_LANG_TAX_ID', 'supplang_lang' );
 // Prefix that should be used by all plugin classes
@@ -34,24 +36,24 @@ define(
       'desc'   => 'Apply this to italian written articles',
       'slug'   => 'it',
     ),
+    array(
+			'name'   => 'Deutsch',
+			'locale' => 'de_DE',
+      'desc'   => 'Apply this to german written articles',
+      'slug'   => 'de',
+    ),
 		array(
 			'name'   => 'Rumansch',
 			'locale' => 'rm_CH',
       'desc'   => 'Apply this to romansch written articles',
       'slug'   => 'rm',
     ),
-		array(
+    array(
 			'name'   => 'English',
 			'locale' => 'en_GB',
       'desc'   => 'Apply this to english written articles',
       'slug'   => 'en',
-    ),
-		array(
-			'name'   => 'Deutsch',
-			'locale' => 'de_DE',
-      'desc'   => 'Apply this to german written articles',
-      'slug'   => 'de',
-    ),
+    )
 	)
 );
 
@@ -98,4 +100,5 @@ if ( is_admin() ) {
   require_once 'frontend/api.php';
   new Supplang_Link_Manager();
   new Supplang_Locale_Manager();
+  new Supplang_Api();
 }
