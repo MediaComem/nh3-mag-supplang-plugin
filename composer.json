@@ -23,7 +23,10 @@
       "phpcbf --standard=.phpcs.xml ./"
     ],
     "release": [
-      "CliScripts\\Releases::make"
+      "CliScripts\\Releases::route"
+    ],
+    "release help": [
+      "CliScripts\\Releases::writeHelp"
     ],
     "plugin-header": [
       "CliScripts\\PluginHeader::generate"

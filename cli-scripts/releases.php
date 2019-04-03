@@ -11,7 +11,98 @@ include_once 'utils.php';
 
 class Releases {
 
+  const COMMANDS = ['delete', 'make'];
+  const VERSION_SYNTAX = '/v(\d\.){2}\d/';
   const WHITELIST = ['major', 'minor', 'patch'];
+
+  public static function route(Event $event) {
+    $args = $event->getArguments();
+    // Incorrect number of arguments
+    if ( sizeof($args) === 0 || sizeof($args) > 2 ) {
+      write("ERROR --- You provided ".sizeof($args)." argument".(sizeof($args) === 0 ? '' : 's').".");
+      self::writeHelp();
+      exit();
+    }
+    $action = $args[0];
+    if ($action === self::COMMANDS[0]) { // delete
+      write("You wish to delete a release");
+      $version = isset($args[1]) ? $args[1] : null;
+      if (preg_match(self::VERSION_SYNTAX, $version)) {
+        write("You wish to delete the $version release");
+        self::delete($version);
+      } else {
+        write([
+          "Bad version argument",
+          self::writeHelp()
+        ]);
+      }
+    } else if ($action === self::COMMANDS[1]) { // make
+      write('You wish to make a release');
+      $type = isset($args[1]) ? $args[1] : null;
+      if (null !== $type && in_array($type, self::WHITELIST)) {
+        self::make($type);
+      } else {
+        write([
+          "Bad type argument",
+          self::writeHelp()
+        ]);
+      }
+    } else if (in_array($action, self::WHITELIST)) {
+      self::make($action);
+    } else {
+      write(self::writeHelp());
+    }
+  }
+
+  public static function writeHelp() {
+    self::writeMakeHelp();
+    write();
+    self::writeDeleteHelp();
+  }
+
+  private static function writeMakeHelp() {
+    write([
+      '---------------------------------------',
+      'Make and deploy a new release to GitLab',
+      '',
+      'Usage:',
+      ' composer release [make] <major|minor|patch>',
+      '',
+      'Arguments:',
+      '  major ---- will increment the first number of the release version.',
+      '             example: getting from a v1.2.3 to a v2.0.0',
+      '  minor ---- will increment the second number of the release version.',
+      '             example: getting from a v.1.2.3 to a v.1.3.0',
+      '  patch ---- will increment the last number of the release version.',
+      '             example: getting from a v.1.2.3 to a v.1.2.4',
+      'Help:',
+      '  Update the plugin.json file.',
+      '  Regenerate a new supplang.php file.',
+      '  Create a zipfile containing the necessary plugin files.',
+      '  Upload the zipfile to GitLab, using the settings in the .release.conf file.',
+      '  Finally, create a new release on GitLab, attaching the uploaded zipfile.'
+      ]);
+    }
+
+  private static function writeDeleteHelp() {
+    write([
+      '-----------------------------',
+      'Delete a release from GitLab',
+      '',
+      'Usage:',
+      '  composer release delete <version>',
+      '',
+      'Arguments:',
+      '  <version> - the version number of the release to delete.',
+      '              Must respect the format "v(\d\.){2}\d\."',
+      'Examples:',
+      '  composer release delete v1.2.3',
+      '  composer release delete v0.0.1',
+      '',
+      'Help:',
+    ]);
+  }
+
 
   /**
    * Main process of creating a new Release, using semver notation.
@@ -22,24 +113,10 @@ class Releases {
    * * `patch` - A patch release up the patch number of your semver, i.e. going from v0.1.3 to v0.1.4
    * At the end of the process, you'll find a new zip file in the `releases` folder with the name `supplang_release_vX.X.X.zip`, `vX.X.X` matchin the new version number.
    */
-	public static function make(Event $event) {
+	private static function make($type) {
     write();
-    $args = $event->getArguments();
-    $type = $args[0];
-    // Incorrect number of arguments
-    if ( sizeof($args) === 0 || sizeof($args) > 1 ) {
-      return write([
-        "ERROR --- You provided ".sizeof($args)." argument".(sizeof($args) === 0 ? '' : 's').".",
-        "INFO ---- ".self::acceptedArgs(),
-      ]);
-    // Invalid argument
-    } elseif (!in_array($type, self::WHITELIST)) {
-      return write([
-        "ERROR --- The provided argument, \"$type\", is not a valid argument.",
-        "INFO ---- ".self::acceptedArgs()
-      ]);
     // Making release
-    } elseif (self::checkGitStatus()) {
+    if (self::checkGitStatus()) {
       // Get the new version based on given argument (major, minor, patch)
       $versions = self::bumpVersionNumberTo($type);
       write([
@@ -73,6 +150,10 @@ class Releases {
       }
       write();
     }
+  }
+
+  private static function delete($version) {
+    write("DELETED -- $version release");
   }
 
   /**
@@ -165,14 +246,6 @@ class Releases {
     }
     curl_close($ch);
     return $response;
-  }
-
-  /**
-   * Generic message for the accepted arguments.
-   * TODO: Generate the list from the WHITELIST constant
-   */
-  private static function acceptedArgs() {
-    return 'The release script requires one argument among the following ones : "major", "minor" or "patch".';
   }
 
   /**
@@ -280,4 +353,5 @@ class Releases {
     }
     return true;
   }
+
 }
