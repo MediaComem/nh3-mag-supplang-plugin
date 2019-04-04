@@ -11,7 +11,7 @@ include_once 'utils.php';
 
 class Releases {
 
-  const COMMANDS = ['delete', 'make'];
+  const COMMANDS = ['delete', 'make', 'zip'];
   const VERSION_SYNTAX = '/v(\d\.){2}\d/';
   const WHITELIST = ['major', 'minor', 'patch'];
 
@@ -33,6 +33,17 @@ class Releases {
       } else {
         write([
           "Bad version argument",
+          self::writeHelp()
+        ]);
+      }
+    } else if ($action === self::COMMANDS[2]) { // zip
+      write('You wish to make a zip');
+      $version = isset($args[1]) ? $args[1] : null;
+      if (preg_match(self::VERSION_SYNTAX, $version)) {
+        self::makeZipFolder($version);
+      } else {
+        write([
+          'Bad version argument',
           self::writeHelp()
         ]);
       }
@@ -300,7 +311,7 @@ class Releases {
         throw new Exception("cannot open <$zipPath>\n");
       }
       foreach ($config['zip_content']['files'] as $glob) {
-        $zip->addGlob($glob, GLOB_BRACE);
+        $zip->addGlob($glob, GLOB_BRACE, ['add_path' => 'supplang/']);
       }
       write("INFO ---- $zip->numFiles file(s) added to the zip.");
       $zip->close();
