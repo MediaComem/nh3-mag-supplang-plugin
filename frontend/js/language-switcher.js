@@ -10,7 +10,7 @@
     if (currentUrl.match(/[\?|&]uil=[^&]*/)) {
       newUrl = currentUrl.replace(/([\?|&]uil=)[^&]*/, '$1' + this.value);
     // Case when there already is some get param in the url
-    } else if (currentUrl.includes('?')) {
+    } else if (currentUrl.indexOf('?') !== -1) {
       newUrl = currentUrl + "&uil=" + this.value;
     // Case when there is no param in the current url
     } else {
