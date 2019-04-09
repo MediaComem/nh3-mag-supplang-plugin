@@ -50,6 +50,7 @@ if ( ! class_exists( 'Supplang_Api' ) ) {
           $category = get_category( $post['categories'][0], OBJECT );
           $localized_cat_name = $mo === null ? $category->name : $mo->translate($category->name);
           $result->data[$key]['localized_category_name'] = $localized_cat_name;
+          $result->data[$key]['content']['unrendered'] = strip_tags($post['content']['rendered']);
         }
       }
       return $result;
