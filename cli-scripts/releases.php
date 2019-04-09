@@ -301,7 +301,7 @@ class Releases {
    * @return Mixed The relative path to the release zip, as a String, or false if something bad happened.
    */
   private static function makeZipFolder(string $version) {
-    $pluginName = strtolower(loadConfigFile()->pluginName);
+    $pluginName = normalize_name(loadConfigFile()->pluginName);
     $config = self::getReleaseConfig();
     $zipName = "{$pluginName}_{$version}.zip";
     $zipPath = "releases/$zipName";

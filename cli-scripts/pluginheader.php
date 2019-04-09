@@ -21,7 +21,7 @@ Class PluginHeader {
    * and be named with the lowercase value of the `pluginName` attribute.
    */
   private static function makeFile($config) {
-    $filename = strtolower("$config->pluginName.php");
+    $filename = normalize_name("$config->pluginName.php");
     $lines = [
       '<?php',
       '/**',
@@ -38,7 +38,7 @@ Class PluginHeader {
       '// DO NOT ALTER ITS CONTENT',
       '',
       '// Main plugin file path',
-      'define(\''.strtoupper($config->pluginName).'_MAIN_FILE\', __FILE__);',
+      'define(\''.normalize_name($config->pluginName, '_', true).'_MAIN_FILE\', __FILE__);',
       '',
       '// Bootstrap the plugin.',
       "require_once '$config->bootstrapFilePath';"
