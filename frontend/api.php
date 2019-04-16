@@ -66,3 +66,23 @@ function supplang_locale_from_slug($slug) {
   $locale_from_slug = array_column( supplang_languages(), 'locale', 'slug' );
   return array_key_exists($slug, $locale_from_slug) ? $locale_from_slug[ $slug ] : null;
 }
+
+/**
+ * Return the current requested URL (by default) with the `uil` param properly added (and retrieved by default from the currently defined locale).
+ * One can pass specifics value for $url and $lang_slug.
+ * @param String $lang_slug The value that will be set to the `uil` param in the returned url.
+ * @param String $url The URL to which the `uil` param will be added
+ * @return String The updated URL.
+ */
+function supplang_param_in_url($lang_slug = null, $url = null) {
+  $param_name = SUPPLANG_GET_PARAM;
+  $url = isset($url) ? $url : "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  $lang_slug = isset($lang_slug) ? $lang_slug : supplang_slug_from_locale();
+  if (preg_match('/[\?|&]uil=[^&]*/', $url)) {
+    return preg_replace("/([\?|&]uil=)[^&]*/", '$1'.$lang_slug, $url);
+  } else if (strstr($url, '?')) {
+    return "$url&$param_name=$lang_slug";
+  } else {
+    return "$url?$param_name=$lang_slug";
+  }
+}
