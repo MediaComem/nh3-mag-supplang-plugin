@@ -8,7 +8,7 @@
       // (sections are registered for "nh3_nls", each field is registered to a specific section)
       do_settings_sections(SUPPLANG_ADMIN_PAGE_NAME);
       // output save settings button
-      submit_button(__('Save Settings', 'supplang'));
+      submit_button(esc_html__('Save Settings', 'supplang'));
     ?>
   </form>
 </div>
