@@ -17,7 +17,7 @@
       "phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs"
     ],
     "lint": [
-      "phpcs --standard=.phpcs.xml ./"
+      "phpcs --standard=.phpcs.xml --ignore=*/cli-scripts/* ./"
     ],
     "lint:fix": [
       "phpcbf --standard=.phpcs.xml ./"

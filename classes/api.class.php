@@ -50,7 +50,7 @@ if ( ! class_exists( 'Supplang_Api' ) ) {
 				$mo = $this->get_language_mo( $request[ SUPPLANG_GET_PARAM ] );
 				foreach ( $result->data as $key => $post ) {
 					$category                                        = get_category( $post['categories'][0], OBJECT );
-					$localized_cat_name                              = $mo === null ? $category->name : $mo->translate( $category->name );
+					$localized_cat_name                              = null === $mo ? $category->name : $mo->translate( $category->name );
 					$result->data[ $key ]['localized_category_name'] = $localized_cat_name;
 					$result->data[ $key ]['content']['unrendered']   = strip_tags( $post['content']['rendered'] );
 				}
@@ -69,7 +69,7 @@ if ( ! class_exists( 'Supplang_Api' ) ) {
 		private function get_language_mo( $lang_slug ) {
 			$locale = supplang_locale_from_slug( $lang_slug );
 			$mofile = get_template_directory() . "/languages/$locale.mo";
-			if ( $locale !== null && file_exists( $mofile ) ) {
+			if ( null !== $locale && file_exists( $mofile ) ) {
 				$mo = new MO();
 				$mo->import_from_file( $mofile );
 			}

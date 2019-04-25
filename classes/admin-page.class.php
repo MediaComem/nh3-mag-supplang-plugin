@@ -38,7 +38,7 @@ if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
 		public function register_setting_section() {
 			add_settings_section(
 				self::SECTION_NAME,
-				__( 'User Interface Languages' ),
+				__( 'User Interface Languages', 'supplang' ),
 				$this->load_template( 'settings-section' ),
 				SUPPLANG_ADMIN_PAGE_NAME
 			);
@@ -73,7 +73,7 @@ if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
 					// TODO check if po file exists
 					// TODO if po file -> link to edit translation
 					// TODO if no po file -> link to create po file ?
-					$path                  = urlencode( "themes/nh3-mag/languages/{$language['locale']}.po" );
+					$path                  = rawurlencode( "themes/nh3-mag/languages/{$language['locale']}.po" );
 					$language['loco_link'] = get_site_url() . "/wp-admin/admin.php?path=$path&bundle=nh3-mag&domain=nh3-mag&page=loco-theme&action=file-edit";
 					return $language;
 				}, SUPPLANG_LANGUAGES

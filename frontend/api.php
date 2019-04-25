@@ -31,7 +31,7 @@ function supplang_languages() {
 				$languages['filtered'], array_filter(
 					$lang, function( $key ) {
 						// Do not send the description key
-						return $key !== 'description';
+						return 'description' !== $key;
 					}, ARRAY_FILTER_USE_KEY
 				)
 			);

@@ -41,6 +41,7 @@ if ( ! class_exists( 'Supplang_Locale_Manager' ) ) {
 			$locale_get    = in_array( $locale_get, $locale_whitelist, true ) ? $locale_get : null;
 			$locale_cookie = in_array( $_COOKIE[ self::COOKIE_NAME ], $locale_whitelist, true ) ? $_COOKIE[ self::COOKIE_NAME ] : null;
 
+      // TODO change this assignement with a ternary operator?
 			( $locale = $locale_get ) || ( $locale = $locale_cookie );
 
 			if ( $locale && ( ! $locale_cookie || $locale !== $locale_cookie ) ) {

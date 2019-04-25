@@ -18,8 +18,8 @@ class Releases {
 	public static function route( Event $event ) {
 		$args = $event->getArguments();
 		// Incorrect number of arguments
-		if ( sizeof( $args ) === 0 || sizeof( $args ) > 2 ) {
-			write( 'ERROR --- You provided ' . sizeof( $args ) . ' argument' . ( sizeof( $args ) === 0 ? '' : 's' ) . '.' );
+		if ( count( $args ) === 0 || count( $args ) > 2 ) {
+			write( 'ERROR --- You provided ' . count( $args ) . ' argument' . ( count( $args ) === 0 ? '' : 's' ) . '.' );
 			self::writeHelp();
 			exit();
 		}
@@ -287,7 +287,7 @@ class Releases {
 	 */
 	private static function bumpVersionNumberTo( $type ) {
 		exec( 'git tag -l', $tags ); // Get git tags
-		$version['last'] = sizeof( $tags ) === 0 ? 'v0.0.0' : end( $tags );
+		$version['last'] = count( $tags ) === 0 ? 'v0.0.0' : end( $tags );
 		$last_array      = explode( '.', str_replace( 'v', '', $version['last'] ) );
 		$current_array   = array(
 			'major' => (int) $last_array[0],
@@ -367,7 +367,7 @@ class Releases {
 	 */
 	private static function checkGitStatus() {
 		exec( 'git status --porcelain', $status );
-		if ( sizeof( $status ) !== 0 ) {
+		if ( count( $status ) !== 0 ) {
 			write(
 				array(
 					'ERROR --- You have unstaged changes in your repository...',
@@ -377,7 +377,7 @@ class Releases {
 			return false;
 		}
 		exec( 'git log @{u}..', $commits );
-		if ( sizeof( $commits ) !== 0 ) {
+		if ( count( $commits ) !== 0 ) {
 			write(
 				array(
 					'ERROR --- You have local commits that are not pushed to remote branch...',
