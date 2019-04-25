@@ -3,8 +3,9 @@
  * Renders an HTML select list that displays the available user interface languages.
  * Loads a script that allows the user to actually change the language.
  */
-function supplang_switcher() {
+function supplang_switcher(array $options = array('wrapper' => true)) {
   wp_enqueue_script( 'supplang-language-switcher', plugin_dir_url( __FILE__ ).'js/language-switcher.js', array('jquery'), null, true );
+  $wrapper = array_key_exists('wrapper', $options) && true === $options['wrapper'];
 	include 'templates/language-selector.php';
 }
 
