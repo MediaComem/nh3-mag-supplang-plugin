@@ -7,17 +7,17 @@
  * --- DEFINE PLUGIN CONSTANTS ---
  */
 // Plugin name
-define( 'SUPPLANG_NAME', 'supplang');
+define( 'SUPPLANG_NAME', 'supplang' );
 // ID for the custom taxonomy
 define( 'SUPPLANG_LANG_TAX_ID', 'supplang_lang' );
 // Prefix that should be used by all plugin classes
 define( 'SUPPLANG_CLASS_PREFIX', 'Supplang' );
 // Name of the Supplang option group
-define( 'SUPPLANG_OPTION_GROUP', 'supplang');
+define( 'SUPPLANG_OPTION_GROUP', 'supplang' );
 // Name of the admin settings page
-define( 'SUPPLANG_ADMIN_PAGE_NAME', 'supplang_admin_settings');
+define( 'SUPPLANG_ADMIN_PAGE_NAME', 'supplang_admin_settings' );
 // Name of the setting that list available languages for the site UI
-define( 'SUPPLANG_AVAILABLE_UIL', 'supplang_available_uil');
+define( 'SUPPLANG_AVAILABLE_UIL', 'supplang_available_uil' );
 // Name of the GET param for changing the UI language
 define( 'SUPPLANG_GET_PARAM', 'uil' );
 // List of available languages
@@ -26,34 +26,34 @@ define(
 	'SUPPLANG_LANGUAGES', array(
 		array(
 			'name'   => 'Français',
-      'locale' => 'fr_FR',
-      'desc'   => 'Apply this to french written articles',
-      'slug'   => 'fr',
+			'locale' => 'fr_FR',
+			'desc'   => 'Apply this to french written articles',
+			'slug'   => 'fr',
 		),
 		array(
 			'name'   => 'Italiano',
 			'locale' => 'it_IT',
-      'desc'   => 'Apply this to italian written articles',
-      'slug'   => 'it',
-    ),
-    array(
+			'desc'   => 'Apply this to italian written articles',
+			'slug'   => 'it',
+		),
+		array(
 			'name'   => 'Deutsch',
 			'locale' => 'de_DE',
-      'desc'   => 'Apply this to german written articles',
-      'slug'   => 'de',
-    ),
+			'desc'   => 'Apply this to german written articles',
+			'slug'   => 'de',
+		),
 		array(
 			'name'   => 'Rumansch',
 			'locale' => 'rm_CH',
-      'desc'   => 'Apply this to romansch written articles',
-      'slug'   => 'rm',
-    ),
-    array(
+			'desc'   => 'Apply this to romansch written articles',
+			'slug'   => 'rm',
+		),
+		array(
 			'name'   => 'English',
 			'locale' => 'en_GB',
-      'desc'   => 'Apply this to english written articles',
-      'slug'   => 'en',
-    )
+			'desc'   => 'Apply this to english written articles',
+			'slug'   => 'en',
+		),
 	)
 );
 
@@ -66,7 +66,7 @@ spl_autoload_register(
 		if ( SUPPLANG_CLASS_PREFIX === $class_name_parts[0] ) {
 			array_shift( $class_name_parts );
 			$classes_dir = realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR;
-      $class_file  = strtolower( implode( '-', $class_name_parts ) . '.class.php' );
+			$class_file  = strtolower( implode( '-', $class_name_parts ) . '.class.php' );
 			require_once $classes_dir . $class_file;
 		}
 	}
@@ -93,12 +93,12 @@ add_filter( 'parse_query', array( $supplang_lang_tax, 'admin_filter_posts' ) );
  */
 
 if ( is_admin() ) {
-  // Load the admin features
-  new Supplang_Admin_Page();
+	// Load the admin features
+	new Supplang_Admin_Page();
 } else {
-  // Load the frontend features
-  require_once 'frontend/api.php';
-  new Supplang_Link_Manager();
-  new Supplang_Locale_Manager();
-  new Supplang_Api();
+	// Load the frontend features
+	require_once 'frontend/api.php';
+	new Supplang_Link_Manager();
+	new Supplang_Locale_Manager();
+	new Supplang_Api();
 }

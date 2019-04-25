@@ -3,9 +3,9 @@
  * Renders an HTML select list that displays the available user interface languages.
  * Loads a script that allows the user to actually change the language.
  */
-function supplang_switcher(array $options = array('wrapper' => true)) {
-  wp_enqueue_script( 'supplang-language-switcher', plugin_dir_url( __FILE__ ).'js/language-switcher.js', array('jquery'), null, true );
-  $wrapper = array_key_exists('wrapper', $options) && true === $options['wrapper'];
+function supplang_switcher( array $options = array( 'wrapper' => true ) ) {
+	wp_enqueue_script( 'supplang-language-switcher', plugin_dir_url( __FILE__ ) . 'js/language-switcher.js', array( 'jquery' ), null, true );
+	$wrapper = array_key_exists( 'wrapper', $options ) && true === $options['wrapper'];
 	include 'templates/language-selector.php';
 }
 
@@ -18,23 +18,27 @@ function supplang_switcher(array $options = array('wrapper' => true)) {
  * @return Array
  */
 function supplang_languages() {
-  $languages = array(
-    'filtered' => array(),
-    // The option array uses the language locale as a key to indicate its availability
-    'available' => get_option( SUPPLANG_AVAILABLE_UIL )
-  );
+	$languages = array(
+		'filtered'  => array(),
+		// The option array uses the language locale as a key to indicate its availability
+		'available' => get_option( SUPPLANG_AVAILABLE_UIL ),
+	);
 
-  foreach (SUPPLANG_LANGUAGES as $lang) {
-    if (array_key_exists( $lang['locale'], $languages['available'] ) ) {
-      // Add filtered language
-      array_push( $languages['filtered'], array_filter( $lang, function($key) {
-        // Do not send the description key
-        return $key !== 'description';
-      }, ARRAY_FILTER_USE_KEY ) );
-    }
-  }
+	foreach ( SUPPLANG_LANGUAGES as $lang ) {
+		if ( array_key_exists( $lang['locale'], $languages['available'] ) ) {
+			// Add filtered language
+			array_push(
+				$languages['filtered'], array_filter(
+					$lang, function( $key ) {
+						// Do not send the description key
+						return $key !== 'description';
+					}, ARRAY_FILTER_USE_KEY
+				)
+			);
+		}
+	}
 
-  return $languages['filtered'];
+	return $languages['filtered'];
 }
 
 /**
@@ -42,9 +46,9 @@ function supplang_languages() {
  * @param String path A path that will be appended to the home url
  * @return String the resulting home url
  */
-function supplang_home_url($path = '') {
-  $home_url = home_url( $path );
-  return $home_url . (strpos($home_url, '?') ? '&' : '?') . SUPPLANG_GET_PARAM . '=' . supplang_slug_from_locale();
+function supplang_home_url( $path = '' ) {
+	$home_url = home_url( $path );
+	return $home_url . ( strpos( $home_url, '?' ) ? '&' : '?' ) . SUPPLANG_GET_PARAM . '=' . supplang_slug_from_locale();
 }
 
 /**
@@ -53,8 +57,8 @@ function supplang_home_url($path = '') {
  * @return String The language slug, composed of the first two characters of the defined locale.
  */
 function supplang_slug_from_locale() {
-  $slug_from_locale = array_column( supplang_languages(), 'slug', 'locale' );
-  return array_key_exists(get_locale(), $slug_from_locale) ? $slug_from_locale[ get_locale() ] : 'de';
+	$slug_from_locale = array_column( supplang_languages(), 'slug', 'locale' );
+	return array_key_exists( get_locale(), $slug_from_locale ) ? $slug_from_locale[ get_locale() ] : 'de';
 }
 
 /**
@@ -63,9 +67,9 @@ function supplang_slug_from_locale() {
  * @param String $slug The language slug
  * @return Mixed The language locale for the given slug, or null if no corresponding locale found.
  */
-function supplang_locale_from_slug($slug) {
-  $locale_from_slug = array_column( supplang_languages(), 'locale', 'slug' );
-  return array_key_exists($slug, $locale_from_slug) ? $locale_from_slug[ $slug ] : null;
+function supplang_locale_from_slug( $slug ) {
+	$locale_from_slug = array_column( supplang_languages(), 'locale', 'slug' );
+	return array_key_exists( $slug, $locale_from_slug ) ? $locale_from_slug[ $slug ] : null;
 }
 
 /**
@@ -75,15 +79,15 @@ function supplang_locale_from_slug($slug) {
  * @param String $url The URL to which the `uil` param will be added
  * @return String The updated URL.
  */
-function supplang_param_in_url($lang_slug = null, $url = null) {
-  $param_name = SUPPLANG_GET_PARAM;
-  $url = isset($url) ? $url : "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-  $lang_slug = isset($lang_slug) ? $lang_slug : supplang_slug_from_locale();
-  if (preg_match('/[\?|&]uil=[^&]*/', $url)) {
-    return preg_replace("/([\?|&]uil=)[^&]*/", '$1'.$lang_slug, $url);
-  } else if (strstr($url, '?')) {
-    return "$url&$param_name=$lang_slug";
-  } else {
-    return "$url?$param_name=$lang_slug";
-  }
+function supplang_param_in_url( $lang_slug = null, $url = null ) {
+	$param_name = SUPPLANG_GET_PARAM;
+	$url        = isset( $url ) ? $url : "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+	$lang_slug  = isset( $lang_slug ) ? $lang_slug : supplang_slug_from_locale();
+	if ( preg_match( '/[\?|&]uil=[^&]*/', $url ) ) {
+		return preg_replace( '/([\?|&]uil=)[^&]*/', '$1' . $lang_slug, $url );
+	} elseif ( strstr( $url, '?' ) ) {
+		return "$url&$param_name=$lang_slug";
+	} else {
+		return "$url?$param_name=$lang_slug";
+	}
 }
