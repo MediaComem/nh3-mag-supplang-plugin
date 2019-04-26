@@ -70,7 +70,7 @@ The `<select>` element (and its `<option>`) will be wrapped around a `<div class
 
 ```html
 <div id="supplang-selector-wrapper">
-	<select name="supplang-uil" id="supplang-selector-select">
+  <select name="supplang-uil" id="supplang-selector-select">
     <option value="fr">Français</option>
     <option value="en">English</option>
   </select>
