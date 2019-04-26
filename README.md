@@ -1,31 +1,140 @@
 # NH3 Language Switcher
 
-This is a WordPress plugin that adds switching the language of a theme without medeling with the language of the content.
+This is a WordPress plugin that allows for switching the language of a theme without interfering with the language of the content.
 
-## Settings
+> **This plugin has been developed using a WordPress 5.1.1**
 
-This plugin comes with one setting, which is a list of languages available to the user for them to apply to the front-end UI.
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Installation](#installation)
+  - [Update](#update)
+- [Settings](#settings)
+- [Usage](#usage)
+  - [Utility function](#utility-function)
+  - [Rendering](#rendering)
+- [API](#api)
+  - [`supplang_languages()`](#supplang_languages)
+  - [`supplang_home_url( $path = '' )`](#supplang_home_url-path---)
+  - [`supplang_slug_from_locale()`](#supplang_slug_from_locale)
+  - [`supplang_locale_from_slug( $slug )`](#supplang_locale_from_slug-slug-)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Installation
+
+To install the Supplang plugin, download the latest [release][2], and uncompress it in your `wp-content/plugins` folder (or use the **Plugins > Add New** menu entry and click on the **Upload Plugin** button).
+
+Then, go to your WordPress admin and navigate to **Plugins > Installed Plugins** and activate the **Supplang** plugin.
+
+## Update
+
+To update the plugin, you'll need to download the new [release][2], uncompress it somwhere, and replace all the files in your `wp-content/plugins/supplang` folder by the one contained in the compressed downloaded file.
+
+# Settings
+
+This plugin comes with one setting, which is a list of languages that can be made available to the user, for them to select as their front-end UI.
 The setting is located under the **Settings > Site Languages** menu from the admin panel.
-The value of the field should be a list of [WordPress locales](https://translate.wordpress.org/), separated by a comma.
 
-**Examples of valid values:**
-* `fr_FR` - End users could choose a French UI... but having a single value is utterly useless.
-* `fr_FR,it_IT` - End users could choose between a French or Italian UI.
-* `fr_FR,en_EN,de_CH` - End users could choose between a French, English or Italian UI.
-* ...
+Simply toggle a language checkbox to render this language either available (when checked) or unavailable (when unchecked) to you users.
 
-> Adding a locale to the list **DOES NOT** download the corresponding `.mo` and `.po` files! You'll need to do this yourself.
+> **Checking a langauge does not magically render your site translated in this language!** You **still need** to have a translation file available in your theme.
 
-## Changing the front-end UI language
+# Usage
 
-To change the language, you can send a POST request on the current URL, sending a POST param named `supplang-uil` whose value should be one of the locale defined in the admin panel.
+The switching of the language occurs when the requested URL contains a GET parameter named `uil` whose value is one of the language's locale defined in the admin panel:
 
-You can also use a special function in your templates that displays a select list of the available languages and send the POST request for you. To do so, use this function somewhere in your templates:
+| Language | `uil` value |
+| :------- | :---------- |
+| French   | `fr`        |
+| Italian  | `it`        |
+| German   | `de`        |
+| Rumansh  | `rm`        |
+| English  | `en`        |
+
+## Utility function
+
+You can also use a special function in your templates that displays a `<select>` list of the available languages, and manages the GET param and it's value for you. To do so, use this function somewhere in your templates:
 
 ```php
-SUPPLANG_LANGUAGES_selector();
+supplang_switcher();
 ```
-# Development
+> You do not need to make an `echo` of this function ; just call it as is.
+
+Note that for this switcher to properly function, some JavaScript is involved in the front-end, and a Cookie is placed on your user's browser to save the currently selected language, in case the `uil` param is missing in subsequent URL requests.
+
+## Rendering
+
+The `<select>` element (and its `<option>`) will be wrapped around a `<div class="">`. Suppose you checked French and English in your admin setting ; a call to `supplang_switcher()` would render the following HTML markup:
+
+```html
+<div id="supplang-selector-wrapper">
+	<select name="supplang-uil" id="supplang-selector-select">
+    <option value="fr">Français</option>
+    <option value="en">English</option>
+  </select>
+</div>
+```
+
+You can get rid of the wrapping `<div>` by passing an option array to the `supplang_switcher()` function with a `wrapper` item set to `false`, like this:
+
+```php
+supplang_switcher( array( 'wrapper' => false ) );
+```
+In this case, the `<select>` element will be directly inserted in place:
+
+```html
+<select name="supplang-uil" id="supplang-selector-select">
+  <option value="fr">Français</option>
+  <option value="en">English</option>
+</select>
+```
+# API
+
+The Supplang plugin provides several utilities function, in addition to `supplang_switcher()`
+
+## `supplang_languages()`
+
+**Returns an array of available languages.**
+
+The returned languages are the one that have been checked using the plugin setting in **Settings > Site Languages** page.
+
+Each item is an array with the following properties:
+ * `name` - The name of the language, in the language itself (i.e. "Deutsch" for the german language, or "Français" for the french)
+ * `locale` - The name of the WordPress locale for this language (see [Usage](#usage))
+
+## `supplang_home_url( $path = '' )`
+
+**Append the supplang `uil` query param to the home url, and returns it.**
+
+> This is a wrapper around [the wordpress `home_url()` function][1].
+
+_Params:_
+* `$path` _(string)_ - A path that will be appended to the home url, before the `uil` param.
+
+## `supplang_slug_from_locale()`
+
+**Get the supplang language slug corresponding to the current site locale.**
+
+> **Note:** The locale will be searched among the **available** languages as set in the **Settings > Site Languages** page.
+
+_Returns:_
+ * _(string)_ - The language slug, composed of the first two characters of the defined locale.
+
+## `supplang_locale_from_slug( $slug )`
+
+**Get the supplang language locale corresponding to the given `$slug`.**
+
+> **Note:** The slug will be searched among the **available** languages as set in the **Settings > Site Languages** page.
+
+_Params:_
+ * `$slug` _(string)_ - The language slug (i.e. `fr`, `en`, etc).
+
+_Returns:_
+ * _(string)_ - The language locale for the given slug, or `null` if no corresponding locale found.
+
+<!-- # Development
 
 ## Release
 
@@ -35,4 +144,7 @@ cURL SSL certificate error resolution:
 * Update the `php.ini` file with_
   curl.cainfo="C:\MAMP\cacert.pem"
   openssl.cafile="C:\MAMP\cacert.pem"
-* Restart server
+* Restart server -->
+
+[1]: https://developer.wordpress.org/reference/functions/home_url/
+[2]: https://gitlab.com/mediacomem/nh3-mag-supplang-plugin/releases
