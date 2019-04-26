@@ -43,7 +43,7 @@ function supplang_languages() {
 
 /**
  * Append the supplang user interface language query param to the home url.
- * > This is a wrapper around the wordpress `home_url()` function.
+ * > This is a wrapper around the WordPress `home_url()` function.
  * @see https://developer.wordpress.org/reference/functions/home_url/
  * @param String path A path that will be appended to the home url
  * @return String the resulting home url

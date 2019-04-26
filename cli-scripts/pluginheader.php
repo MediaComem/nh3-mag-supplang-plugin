@@ -38,7 +38,7 @@ class PluginHeader {
 			'// DO NOT ALTER ITS CONTENT',
 			'',
 			'// Main plugin file path',
-			'define(\'' . strtoupper( $config->pluginName ) . '_MAIN_FILE\', __FILE__);',
+			'define( \'' . strtoupper( $config->pluginName ) . '_MAIN_FILE\', __FILE__ );',
 			'',
 			'// Bootstrap the plugin.',
 			"require_once '$config->bootstrapFilePath';",

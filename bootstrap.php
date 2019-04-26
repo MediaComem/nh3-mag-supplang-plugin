@@ -63,27 +63,17 @@ define(
  * @return array
  */
 function supplang_registered_languages() {
-  /**
-   * Filters the registered languages array.
-   *
-   * @since 2.3.0
-   *
-   * @param array The default languages
-   */
-  $languages = apply_filters( 'supplang_register_languages', SUPPLANG_LANGUAGES );
-  // To prevent error when add_filter do not return the languages
-  return empty($languages) ? array() : $languages;
+	/**
+	 * Filters the registered languages array.
+	 *
+	 * @since 2.3.0
+	 *
+	 * @param array The default languages
+	 */
+	$languages = apply_filters( 'supplang_register_languages', SUPPLANG_LANGUAGES );
+	// To prevent error when add_filter do not return the languages
+	return empty( $languages ) ? array() : $languages;
 }
-
-add_filter( 'supplang_register_languages', function($languages) {
-  $languages[] = array(
-    'name'   => 'Español',
-    'locale' => 'es_ES',
-    'desc'   => 'Apply this to spanish written articles',
-    'slug'   => 'es',
-  );
-  return $languages;
-} );
 
 /**
  * --- REGISTER AUTOLOADER ---
