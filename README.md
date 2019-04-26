@@ -1,4 +1,4 @@
-# NH3 Language Switcher
+# Supplang WordPress Plugin
 
 This is a WordPress plugin that allows for switching the language of a theme without interfering with the language of the content.
 
