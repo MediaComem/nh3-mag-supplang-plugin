@@ -24,12 +24,14 @@ if ( ! class_exists( 'Supplang_Locale_Manager' ) ) {
 		public function supplang_define_locale() {
 
 			// Prevent PHP Warnings
+			//phpcs:disable
 			if ( ! isset( $_GET[ SUPPLANG_GET_PARAM ] ) ) {
 				$_GET[ SUPPLANG_GET_PARAM ] = null;
 			}
 			if ( ! isset( $_COOKIE[ self::COOKIE_NAME ] ) ) {
 				$_COOKIE[ self::COOKIE_NAME ] = null;
 			}
+			// phpcs:enable
 
 			$locale_whitelist = array_map(
 				function( $language ) {
@@ -37,12 +39,15 @@ if ( ! class_exists( 'Supplang_Locale_Manager' ) ) {
 				}, supplang_languages()
 			);
 
+			//phpcs:disable
 			$locale_get    = supplang_locale_from_slug( $_GET[ SUPPLANG_GET_PARAM ] );
+			// phpcs:enable
 			$locale_get    = in_array( $locale_get, $locale_whitelist, true ) ? $locale_get : null;
 			$locale_cookie = in_array( $_COOKIE[ self::COOKIE_NAME ], $locale_whitelist, true ) ? $_COOKIE[ self::COOKIE_NAME ] : null;
 
-      // TODO change this assignement with a ternary operator?
-			( $locale = $locale_get ) || ( $locale = $locale_cookie );
+			// TODO change this assignement with a ternary operator?
+			$locale = null !== $locale_get ? $locale_get : $locale_cookie;
+			// ( $locale = $locale_get ) || ( $locale = $locale_cookie );
 
 			if ( $locale && ( ! $locale_cookie || $locale !== $locale_cookie ) ) {
 				setcookie( self::COOKIE_NAME, $locale, time() + DAY_IN_SECONDS * 30, COOKIEPATH, COOKIE_DOMAIN );

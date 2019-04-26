@@ -93,7 +93,9 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 			global $typenow;
 			$post_type = 'post';
 			if ( $typenow === $post_type ) {
-				$selected      = isset( $_GET[ $this->tax_name ] ) ? $_GET[ $this->tax_name ] : '';
+        // phpcs:disable
+				$selected = isset( $_GET[ $this->tax_name ] ) ? $_GET[ $this->tax_name ] : '';
+        // phpcs:enable
 				$info_taxonomy = get_taxonomy( $this->tax_name );
 				wp_dropdown_categories(
 					array(
@@ -119,7 +121,7 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 			$post_type      = 'post';
 			$this->tax_name = SUPPLANG_LANG_TAX_ID;
 			$q_vars         = &$query->query_vars;
-			if ( 'edit.php' === $pagenow && isset( $q_vars['post_type'] ) && $q_vars['post_type'] === $post_type && isset( $q_vars[ $this->tax_name ] ) && is_numeric( $q_vars[ $this->tax_name ] ) && 0 != $q_vars[ $this->tax_name ] ) {
+			if ( 'edit.php' === $pagenow && isset( $q_vars['post_type'] ) && $q_vars['post_type'] === $post_type && isset( $q_vars[ $this->tax_name ] ) && is_numeric( $q_vars[ $this->tax_name ] ) && 0 !== intval( $q_vars[ $this->tax_name ] ) ) {
 				$term                      = get_term_by( 'id', $q_vars[ $this->tax_name ], $this->tax_name );
 				$q_vars[ $this->tax_name ] = $term->slug;
 			}

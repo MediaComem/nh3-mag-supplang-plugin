@@ -49,8 +49,10 @@ if ( ! class_exists( 'Supplang_Api' ) ) {
 			if ( ! empty( $request[ SUPPLANG_GET_PARAM ] ) && supplang_locale_from_slug( $request[ SUPPLANG_GET_PARAM ] ) !== null ) {
 				$mo = $this->get_language_mo( $request[ SUPPLANG_GET_PARAM ] );
 				foreach ( $result->data as $key => $post ) {
-					$category                                        = get_category( $post['categories'][0], OBJECT );
+					$category = get_category( $post['categories'][0], OBJECT );
+					// phpcs:disable
 					$localized_cat_name                              = null === $mo ? $category->name : $mo->translate( $category->name );
+					// phpcs:enable
 					$result->data[ $key ]['localized_category_name'] = $localized_cat_name;
 					$result->data[ $key ]['content']['unrendered']   = strip_tags( $post['content']['rendered'] );
 				}
