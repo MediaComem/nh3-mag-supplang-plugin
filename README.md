@@ -2,6 +2,8 @@
 
 This is a WordPress plugin that allows for switching the language of a theme without interfering with the language of the content.
 
+It also register a new custom taxonomy, called `supplang_lang` that can be applied to posts, and indicates that it has been written in a specific language.
+
 > **This plugin has been developed using a WordPress 5.1.1**
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -27,6 +29,8 @@ This is a WordPress plugin that allows for switching the language of a theme wit
 To install the Supplang plugin, download the latest [release][2], and uncompress it in your `wp-content/plugins` folder (or use the **Plugins > Add New** menu entry and click on the **Upload Plugin** button).
 
 Then, go to your WordPress admin and navigate to **Plugins > Installed Plugins** and activate the **Supplang** plugin.
+
+> Activating the plugin will register the new `supplang_lang` taxonomy and create the defaults value, one for each out-of-the-box registered languages (see [Usage](#usage)).
 
 ## Update
 
@@ -134,6 +138,33 @@ _Params:_
 _Returns:_
  * _(string)_ - The language locale for the given slug, or `null` if no corresponding locale found.
 
+# Filters
+
+The plugin provide one filter, `supplang_register_languages` that allows you to add new supported languages to the plugin.
+
+To do this, call `add_filter` with a callback that accepts one parameter, which is an array of the currently registered languages. You then can add a new item (or several) to this array to register as much languages.
+
+Each new item must be an array with the following items:
+* `name` - The name of the language, preferably in the language itself (so not its english name)
+* `locale` - Must be an official WordPress locale code. See [here][3] and search for your language's locale code (that's the small code in grey at the bottom of each language card).
+* `slug` - Your language's slug. It's used throughout the plugin and as the value of `uil`. It's usually the first two characters of your locale.
+
+## Example
+
+```php
+add_filter( 'supplang_register_languages', function($languages) {
+  $languages[] = array(
+    'name'   => 'Español',
+    'locale' => 'es_ES',
+    'slug'   => 'es',
+  );
+  return $languages;
+} );
+```
+This will register the spanish languages as a new supported language by the plugin. You'll then be able to check it in the admin setting panel, and thus, selecting it as your site locale.
+
+> I repeat: registering a new language and checking it in the settings **does not translates your site in this language!**
+
 <!-- # Development
 
 ## Release
@@ -148,3 +179,4 @@ cURL SSL certificate error resolution:
 
 [1]: https://developer.wordpress.org/reference/functions/home_url/
 [2]: https://gitlab.com/mediacomem/nh3-mag-supplang-plugin/releases
+[3]: https://translate.wordpress.org/

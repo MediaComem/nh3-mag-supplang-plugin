@@ -24,7 +24,7 @@ function supplang_languages() {
 		'available' => get_option( SUPPLANG_AVAILABLE_UIL ),
 	);
 
-	foreach ( SUPPLANG_LANGUAGES as $lang ) {
+	foreach ( supplang_registered_languages() as $lang ) {
 		if ( array_key_exists( $lang['locale'], $languages['available'] ) ) {
 			// Add filtered language
 			array_push(

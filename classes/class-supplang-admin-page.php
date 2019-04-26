@@ -60,7 +60,7 @@ if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
 
 		public function load_template( $template_name ) {
 			$option_values = $this->option_values;
-			// N.B.: The $args param of the anonymous function is ued in the templates
+			// N.B.: The $args param of the anonymous function is used in the templates
 			// and therefor must be declared in the function's param.
 			return function( $args ) use ( $template_name, $option_values ) {
 				include __DIR__ . "/../admin/templates/$template_name.php";
@@ -76,9 +76,8 @@ if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
 					$path                  = rawurlencode( "themes/nh3-mag/languages/{$language['locale']}.po" );
 					$language['loco_link'] = get_site_url() . "/wp-admin/admin.php?path=$path&bundle=nh3-mag&domain=nh3-mag&page=loco-theme&action=file-edit";
 					return $language;
-				}, SUPPLANG_LANGUAGES
+				}, supplang_registered_languages()
 			);
 		}
-
 	}
 }

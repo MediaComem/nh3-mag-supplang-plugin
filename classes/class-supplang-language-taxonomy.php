@@ -34,7 +34,7 @@ if ( ! class_exists( 'Supplang_Language_Taxonomy' ) ) {
 		}
 
 		/**
-		 * Add four default languages in the Language custom taxonomy
+		 * Add the default languages in the Language custom taxonomy
 		 * @author Mathias Oberson
 		 */
 		public function add_default_values() {
