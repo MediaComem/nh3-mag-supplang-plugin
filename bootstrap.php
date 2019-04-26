@@ -64,9 +64,8 @@ spl_autoload_register(
 	function( $class_name ) {
 		$class_name_parts = explode( '_', $class_name );
 		if ( SUPPLANG_CLASS_PREFIX === $class_name_parts[0] ) {
-			array_shift( $class_name_parts );
 			$classes_dir = realpath( plugin_dir_path( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'classes' . DIRECTORY_SEPARATOR;
-			$class_file  = strtolower( implode( '-', $class_name_parts ) . '.class.php' );
+			$class_file  = strtolower( 'class-' . implode( '-', $class_name_parts ) . '.php' );
 			require_once $classes_dir . $class_file;
 		}
 	}
