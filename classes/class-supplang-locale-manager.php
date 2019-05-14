@@ -16,6 +16,8 @@ if ( ! class_exists( 'Supplang_Locale_Manager' ) ) {
 		 * The locale to use is extracted from the the `uil` query parameter, if present, and compared to
 		 * a whitelist of available languages, extracted from the plugin settings and defined in the admin panel.
 		 * The locale is stored in the cookie for future reference, then returned.
+     * If their is not GET param and no cookie, then the language is guessed based on the HTTP_ACCEPT_LANGUAGE header
+     * If the language could not be guessed, it fall back to the default language, which is
 		 * **Note**: The locale defined in the URL has always precedence over the one in the cookie, provided that
 		 * it's an available locale.
 		 *
@@ -43,11 +45,29 @@ if ( ! class_exists( 'Supplang_Locale_Manager' ) ) {
 			$locale_get    = supplang_locale_from_slug( $_GET[ SUPPLANG_GET_PARAM ] );
 			// phpcs:enable
 			$locale_get    = in_array( $locale_get, $locale_whitelist, true ) ? $locale_get : null;
-			$locale_cookie = in_array( $_COOKIE[ self::COOKIE_NAME ], $locale_whitelist, true ) ? $_COOKIE[ self::COOKIE_NAME ] : null;
+      $locale_cookie = in_array( $_COOKIE[ self::COOKIE_NAME ], $locale_whitelist, true ) ? $_COOKIE[ self::COOKIE_NAME ] : null;
 
-			// TODO change this assignement with a ternary operator?
-			$locale = null !== $locale_get ? $locale_get : $locale_cookie;
-			// ( $locale = $locale_get ) || ( $locale = $locale_cookie );
+      // Try to guess the browser preferred language
+      $locale_browser = filter_input(INPUT_SERVER, 'HTTP_ACCEPT_LANGUAGE');
+      if ( boolval( $locale_browser ) ) {
+        // The idea is to try and get a locale from the first two letters of the first language in the header
+        $locale_browser = supplang_locale_from_slug(substr(explode( ',', $locale_browser )[0], 0, 2 )) ;
+        // and compare it to the activated languages for the site.
+        $locale_browser = in_array( $locale_browser, $locale_whitelist, true) ? $locale_browser : null;
+      }
+
+      // Default language
+      $locale = "fr_FR";
+      // Define the locale based on the priority (default < browser < cookie < URL)
+      if ( boolval( $locale_browser ) ) {
+        $locale = $locale_browser;
+      }
+      if ( boolval( $locale_cookie ) ) {
+        $locale = $locale_cookie;
+      }
+      if ( boolval ( $locale_get ) ) {
+        $locale = $locale_get;
+      }
 
 			if ( $locale && ( ! $locale_cookie || $locale !== $locale_cookie ) ) {
 				setcookie( self::COOKIE_NAME, $locale, time() + DAY_IN_SECONDS * 30, COOKIEPATH, COOKIE_DOMAIN );
