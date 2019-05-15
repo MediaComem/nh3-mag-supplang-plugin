@@ -2,11 +2,29 @@
 /**
  * Renders an HTML select list that displays the available user interface languages.
  * Loads a script that allows the user to actually change the language.
+ * You can customized what this function does by passing an option array.
+ * These are the available options:
+ * * $options['wrapper'] - Wether or not to add a div around the select tag. Defaults to true.
+ * * $options['script'] - Wether or not to include the JS script that reloads the page when the select value change. Defaults to true.
+ * * $options['raw'] - Set this to true so that supplang_switcher returns a raw array of available languages. Defaults to false.
+ * * $options['template'] - Pass it a printf template string where %s will be replaced by the language name in each select option.
+ * @param array $options An option array
  */
-function supplang_switcher( array $options = array( 'wrapper' => true ) ) {
-	wp_enqueue_script( 'supplang-language-switcher', plugin_dir_url( __FILE__ ) . 'js/language-switcher.js', array( 'jquery' ), null, true );
-	$wrapper = array_key_exists( 'wrapper', $options ) && true === $options['wrapper'];
-	include 'templates/language-selector.php';
+function supplang_switcher( array $options = array() ) {
+  // Default values
+  $options['wrapper'] = isset( $options['wrapper'] ) ? $options['wrapper'] : true;
+  $options['script'] = isset( $options['script'] ) ? $options['script'] : true;
+  $options['raw'] = isset( $options['raw'] ) ? $options['raw'] : false;
+  $options['template'] = isset( $options['template'] ) ? $options['template'] : '%s';
+
+  if ( $options['script']) {
+    wp_enqueue_script( 'supplang-language-switcher', plugin_dir_url( __FILE__ ) . 'js/language-switcher.js', array( 'jquery' ), null, true );
+  }
+  if ( $options['raw'] ) {
+    return supplang_languages();
+  } else {
+    include 'templates/language-selector.php';
+  }
 }
 
 /**
