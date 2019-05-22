@@ -18,7 +18,13 @@ function supplang_switcher( array $options = array() ) {
   $options['template'] = isset( $options['template'] ) ? $options['template'] : '%s';
 
   if ( $options['script']) {
-    wp_enqueue_script( 'supplang-language-switcher', plugin_dir_url( __FILE__ ) . 'js/language-switcher.js', array( 'jquery' ), null, true );
+    wp_enqueue_script(
+      'supplang-language-switcher',
+      plugin_dir_url( __FILE__ ) . 'js/language-switcher.js',
+      array( 'jquery' ),
+      filemtime( plugin_dir_path( __FILE__ ) . 'js/language-switcher.js' ),
+      true
+    );
   }
   if ( $options['raw'] ) {
     return supplang_languages();
