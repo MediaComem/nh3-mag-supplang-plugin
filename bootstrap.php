@@ -60,6 +60,8 @@ define(
 /**
  * Returns the registered languages.
  * You can register new languages by using the `supplang_register_languages` filter.
+ * This is a low-level function that is called by all other functions relying on the list of languages.
+ * This way, the languages added through the filter are taken into account.
  * @return array
  */
 function supplang_registered_languages() {
@@ -77,6 +79,8 @@ function supplang_registered_languages() {
 
 /**
  * --- REGISTER AUTOLOADER ---
+ * Expect all classe names and files to respect the WordPress naming style
+ * Does not process $class_name not beginning with the SUPPLANG_CLASS_PREFIX constant value.
  */
 spl_autoload_register(
 	function( $class_name ) {
@@ -89,12 +93,14 @@ spl_autoload_register(
 	}
 );
 
+/**
+ * --- Instanciate the new taxonomy manager
+ */
 $supplang_lang_tax = new Supplang_Language_Taxonomy();
 
 /**
  * --- LOAD ACTIVATION/DEACTIVATION HOOKS ---
  */
-
 register_activation_hook( SUPPLANG_MAIN_FILE, array( $supplang_lang_tax, 'activate' ) );
 register_deactivation_hook( SUPPLANG_MAIN_FILE, array( $supplang_lang_tax, 'deactivate' ) );
 
@@ -108,7 +114,6 @@ add_filter( 'parse_query', array( $supplang_lang_tax, 'admin_filter_posts' ) );
 /**
  * --- LOAD PLUGIN FILES ---
  */
-
 if ( is_admin() ) {
 	// Load the admin features
 	new Supplang_Admin_Page();
