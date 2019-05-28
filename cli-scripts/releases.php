@@ -122,15 +122,9 @@ class Releases {
 			write( 'INFO ---- New git tag "' . $versions['current'] . '" created.' );
 			// Publish release
 			if ( $releaseZip ) {
-				$release_conf = self::getReleaseConfig();
 				// Push changes to remote
 				exec( 'git push && git push --tag' );
 				write( 'SUCCESS - Release commit and tag pushed to remote branch' );
-				// Upload zip file
-				$zipUpload = self::uploadReleaseZip( $release_conf, $releaseZip );
-				if ( $zipUpload ) {
-					self::createNewRelease( $release_conf, $versions['current'], $zipUpload );
-				}
 			}
 			write();
 		}
