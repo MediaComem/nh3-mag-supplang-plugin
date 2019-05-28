@@ -11,9 +11,12 @@ It also register a new custom taxonomy, called `supplang_lang` that can be appli
 
 
 - [Installation](#installation)
-  - [Update](#update)
+- [Updates](#updates)
+  - [Manual update](#manual-update)
+  - [Automatic update](#automatic-update)
 - [Settings](#settings)
 - [Usage](#usage)
+  - [Automatic detection](#automatic-detection)
   - [Utility function](#utility-function)
   - [Rendering](#rendering)
 - [API](#api)
@@ -21,6 +24,12 @@ It also register a new custom taxonomy, called `supplang_lang` that can be appli
   - [`supplang_home_url( $path = '' )`](#supplang_home_url-path---)
   - [`supplang_slug_from_locale()`](#supplang_slug_from_locale)
   - [`supplang_locale_from_slug( $slug )`](#supplang_locale_from_slug-slug-)
+- [Filters](#filters)
+  - [Example](#example)
+- [REST API](#rest-api)
+- [Development](#development)
+  - [Project structure](#project-structure)
+- [Composer scripts](#composer-scripts)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
