@@ -11,7 +11,7 @@ require_once 'utils.php';
 
 class Releases {
 
-	const COMMANDS       = array( 'delete', 'make', 'zip' );
+	const COMMANDS       = array( 'make', 'zip' );
 	const VERSION_SYNTAX = '/v(\d\.){2}\d/';
 	const WHITELIST      = array( 'major', 'minor', 'patch' );
 
@@ -24,21 +24,7 @@ class Releases {
 			exit();
 		}
 		$action = $args[0];
-		if ( $action === self::COMMANDS[0] ) { // delete
-			write( 'You wish to delete a release' );
-			$version = isset( $args[1] ) ? $args[1] : null;
-			if ( preg_match( self::VERSION_SYNTAX, $version ) ) {
-				write( "You wish to delete the $version release" );
-				self::delete( $version );
-			} else {
-				write(
-					array(
-						'Bad version argument',
-						self::writeHelp(),
-					)
-				);
-			}
-		} elseif ( $action === self::COMMANDS[2] ) { // zip
+		if ( $action === self::COMMANDS[1] ) { // zip
 			write( 'You wish to make a zip' );
 			$version = isset( $args[1] ) ? $args[1] : null;
 			if ( preg_match( self::VERSION_SYNTAX, $version ) ) {
@@ -51,7 +37,7 @@ class Releases {
 					)
 				);
 			}
-		} elseif ( $action === self::COMMANDS[1] ) { // make
+		} elseif ( $action === self::COMMANDS[0] ) { // make
 			write( 'You wish to make a release' );
 			$type = isset( $args[1] ) ? $args[1] : null;
 			if ( null !== $type && in_array( $type, self::WHITELIST ) ) {
@@ -74,7 +60,6 @@ class Releases {
 	public static function writeHelp() {
 		self::writeMakeHelp();
 		write();
-		self::writeDeleteHelp();
 	}
 
 	private static function writeMakeHelp() {
@@ -97,33 +82,9 @@ class Releases {
 				'  Update the plugin.json file.',
 				'  Regenerate a new supplang.php file.',
 				'  Create a zipfile containing the necessary plugin files.',
-				'  Upload the zipfile to GitLab, using the settings in the .release.conf file.',
-				'  Finally, create a new release on GitLab, attaching the uploaded zipfile.',
 			)
 		);
 	}
-
-	private static function writeDeleteHelp() {
-		write(
-			array(
-				'-----------------------------',
-				'Delete a release from GitLab',
-				'',
-				'Usage:',
-				'  composer release delete <version>',
-				'',
-				'Arguments:',
-				'  <version> - the version number of the release to delete.',
-				'              Must respect the format "v(\d\.){2}\d\."',
-				'Examples:',
-				'  composer release delete v1.2.3',
-				'  composer release delete v0.0.1',
-				'',
-				'Help:',
-			)
-		);
-	}
-
 
 	/**
 	 * Main process of creating a new Release, using semver notation.
@@ -173,110 +134,6 @@ class Releases {
 			}
 			write();
 		}
-	}
-
-	private static function delete( $version ) {
-		write( "DELETED -- $version release" );
-	}
-
-	/**
-	 * Upload the given zip file at $zipPath to GitLab as a project file.
-	 * @return Mixed The GitLab project relative path if file uploaded, or false if something bad happened.
-	 */
-	private static function uploadReleaseZip( $config, $zipPath ) {
-		list( $zipFolder, $zipName ) = explode( '/', $zipPath );
-		// Prepare the request
-		$ch      = curl_init();
-		$options = array(
-			CURLOPT_URL            => "{$config['gitlab']['api_endpoint']}/projects/{$config['gitlab']['project_id']}/uploads",
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_POST           => true,
-			CURLOPT_HTTPHEADER     => array(
-				'Content-Type: multipart/form-data',
-				"PRIVATE-TOKEN: {$config['gitlab']['private_token']}",
-				'Accept: application/json',
-			),
-			CURLOPT_POSTFIELDS     => array(
-				'file' => new CurlFile( $zipPath, 'application/zip', $zipName ),
-			),
-		);
-		curl_setopt_array( $ch, $options );
-		// Execute the request
-		$response = curl_exec( $ch );
-
-		// TODO better error handling
-		if ( ! $response ) {
-			write(
-				array(
-					"ERROR --- Error while uploading the release zip file \"$zipName\" to GitLab...",
-					'INFO ---- Error n°' . curl_errno( $ch ) . ': ' . curl_error( $ch ),
-				)
-			);
-		} else {
-			write( "SUCCESS - Release zip file \"$zipName\" has been uploaded to GitLab." );
-			$response = json_decode( $response, JSON_UNESCAPED_SLASHES )['url'];
-		}
-		curl_close( $ch );
-		return $response;
-	}
-
-	/**
-	 * Create a new release for the specified $version, with the specified $uploadedZipPath asset.
-	 * @return Boolean True if creation successfull, False otherwise.
-	 */
-	private static function createNewRelease( $config, $version, $uploadedZipPath ) {
-		// Prepare the request
-		$ch = curl_init();
-		// Prepare the request payload
-		$post_data = json_encode(
-			array(
-				'name'        => "Release of $version",
-				'tag_name'    => $version,
-				// TODO Better release note process (use external file ?)
-				'description' => "New release of Supplang $version",
-				'assets'      => array(
-					'links' => array(
-						array(
-							'name' => 'WordPress Plugin Zipfile',
-							'url'  => "{$config['gitlab']['project_url']}$uploadedZipPath",
-						),
-					),
-				),
-			), JSON_UNESCAPED_SLASHES
-		);
-
-		$options = array(
-			CURLOPT_URL            => "{$config['gitlab']['api_endpoint']}/projects/{$config['gitlab']['project_id']}/releases",
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_HTTPHEADER     => array(
-				'Content-Type: application/json',
-				"PRIVATE-TOKEN: {$config['gitlab']['private_token']}",
-				'Accept: application/json',
-			),
-			CURLOPT_POST           => true,
-			CURLOPT_POSTFIELDS     => $post_data,
-		);
-		curl_setopt_array( $ch, $options );
-		// Execute the request
-		$response = curl_exec( $ch );
-
-		if ( ! $response ) {
-			write(
-				array(
-					"ERROR --- Error while creating the $version release on GitLab...",
-					'INFO ---- Error n°' . curl_errno( $ch ) . ': ' . curl_error( $ch ),
-				)
-			);
-		} else {
-			write(
-				array(
-					"SUCCESS - New $version release created on GitLab.",
-					"INFO ---- See it on {$config['gitlab']['project_url']}/releases",
-				)
-			);
-		}
-		curl_close( $ch );
-		return $response;
 	}
 
 	/**
