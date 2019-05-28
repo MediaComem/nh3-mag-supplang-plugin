@@ -14,7 +14,6 @@ npm-debug.log
 
 # Releases
 releases/
-.release.conf
 **/*.zip
 
 # Misc

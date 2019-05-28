@@ -1,8 +1,8 @@
 # Supplang WordPress Plugin
 
-This is a WordPress plugin that allows for switching the language of a theme without interfering with the language of the content.
+This is a WordPress plugin that allows switching the language of a theme without interfering with the language of the content.
 
-It also register a new custom taxonomy, called `supplang_lang` that can be applied to posts, and indicates that it has been written in a specific language.
+It also register a new custom taxonomy, called `supplang_lang` that can be applied to posts to indicates that it has been written in a specific language.
 
 > **This plugin has been developed using a WordPress 5.1.1**
 
@@ -32,18 +32,27 @@ Then, go to your WordPress admin and navigate to **Plugins > Installed Plugins**
 
 > Activating the plugin will register the new `supplang_lang` taxonomy and create the defaults value, one for each out-of-the-box registered languages (see [Usage](#usage)).
 
-## Update
+# Updates
 
-To update the plugin, you'll need to download the new [release][2], uncompress it somwhere, and replace all the files in your `wp-content/plugins/supplang` folder by the one contained in the compressed downloaded file.
+## Manual update
+
+To manually update the plugin, you'll need to download the new [release][2], uncompress it somwhere, and replace all the files in your `wp-content/plugins/supplang` folder by the one contained in the compressed downloaded file.
+
+## Automatic update
+
+To automatically push the new updates on the server, configure a webhook on the `push` events. Then, on your server, detect changes on the `master` branch and execute a script that moves the required files in the `wp-content/wp-plugins/supplang` folder.
+
+> You'll find a list of the required files blobs in the `.release.conf` file.
 
 # Settings
 
-This plugin comes with one setting, which is a list of languages that can be made available to the user, for them to select as their front-end UI.
+This plugin comes with one setting, which is a list of languages that can be made available to the end-user, for them to select as their front-end UI.
+
 The setting is located under the **Settings > Site Languages** menu from the admin panel.
 
 Simply toggle a language checkbox to render this language either available (when checked) or unavailable (when unchecked) to you users.
 
-> **Checking a langauge does not magically render your site translated in this language!** You **still need** to have a translation file available in your theme.
+> **Checking a langauge does not magically render your site translated in this language!** You **still need** to have a translation file available in your theme. We suggest using the Loco Translate plugin to manage your theme translation, if it does not natively provide one.
 
 # Usage
 
@@ -57,9 +66,17 @@ The switching of the language occurs when the requested URL contains a GET param
 | Rumansh  | `rm`        |
 | English  | `en`        |
 
+## Automatic detection
+
+Some minimal language detection is done if the URL does not contain the `uil` GET param, and no cookie exists for this user.
+
+This is done by parsing the HTTP_ACCEPT_LANGUAGE header, and checking if the first item somewhat matches one of the available (and checked) languages.
+
+> See [the implementation](./classes/class-supplang-locale-manager.php#50)
+
 ## Utility function
 
-You can also use a special function in your templates that displays a `<select>` list of the available languages, and manages the GET param and it's value for you. To do so, use this function somewhere in your templates:
+You can also use a special function in your templates that displays a `<select>` list of the available languages, and manages the GET param and it's value for you (enqueuing a JS script). To do so, use this function somewhere in your templates:
 
 ```php
 supplang_switcher();
@@ -178,5 +195,5 @@ cURL SSL certificate error resolution:
 * Restart server -->
 
 [1]: https://developer.wordpress.org/reference/functions/home_url/
-[2]: https://gitlab.com/mediacomem/nh3-mag-supplang-plugin/releases
+[2]: https://github.com/Fonsart/nh3-mag-supplang-plugin/releases
 [3]: https://translate.wordpress.org/
