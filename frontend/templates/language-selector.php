@@ -1,3 +1,10 @@
+<?php
+/**
+ * Template used to display the language selector in the theme
+ * Called in the supplang_switcher() function
+ */
+?>
+
 <?php if ( $options['wrapper'] ) : ?>
 <div id="supplang-selector-wrapper">
 <?php endif; ?>

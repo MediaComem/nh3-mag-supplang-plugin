@@ -2,7 +2,7 @@
 if ( ! class_exists( 'Supplang_Api' ) ) {
 
 	/**
-	 * Add language feature to API request on posts.
+	 * Add language feature to REST API request on posts.
 	 */
 	class Supplang_Api {
 
@@ -20,9 +20,9 @@ if ( ! class_exists( 'Supplang_Api' ) ) {
 		 * This can be done by adding a `uil` param to the GET request, and setting it to one of the available language slug.
 		 * An invalid or empty `uil` param will be discarded.
 		 *
-		 * @param Array $query_args The current query arguments
+		 * @param array $query_args The current query arguments
 		 * @param WP_REST_Request $request The request object
-		 * @return Array A potentially updated query args array
+		 * @return array A potentially updated query args array
 		 */
 		public function add_lang_param_in_search_query( $query_args, $request ) {
 			if ( ! empty( $request[ SUPPLANG_GET_PARAM ] ) && supplang_locale_from_slug( $request[ SUPPLANG_GET_PARAM ] ) !== null ) {
@@ -63,14 +63,18 @@ if ( ! class_exists( 'Supplang_Api' ) ) {
 		/**
 		 * Return an MO object for the provided $lang_slug.
 		 * If the $lang_slug does not match an available supplang language,
-		 * or there is no MO file for the matchin locale, then NULL is returned.
+		 * or there is no MO file for the matching locale, then NULL is returned.
+     * The MO file is first searched in the theme languages folder, then in the languages/loco/themes folder, added by the Loco Translate plugin
 		 *
 		 * @param String $lang_slug The language slug
 		 * @return MO|Null The MO file for the language, or NULL
 		 */
 		private function get_language_mo( $lang_slug ) {
 			$locale = supplang_locale_from_slug( $lang_slug );
-			$mofile = get_template_directory() . "/languages/$locale.mo";
+      $mofile = get_template_directory() . "/languages/$locale.mo";
+      if ( ! file_exists( $mofile ) ) {
+        $mofile = ABSPATH . "wp-content/languages/loco/themes/nh3-mag-$locale.mo";
+      }
 			if ( null !== $locale && file_exists( $mofile ) ) {
 				$mo = new MO();
 				$mo->import_from_file( $mofile );

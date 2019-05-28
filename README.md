@@ -66,13 +66,15 @@ The switching of the language occurs when the requested URL contains a GET param
 | Rumansh  | `rm`        |
 | English  | `en`        |
 
+> See [the supported languages](./bootstrap.php#L23)
+
 ## Automatic detection
 
 Some minimal language detection is done if the URL does not contain the `uil` GET param, and no cookie exists for this user.
 
 This is done by parsing the HTTP_ACCEPT_LANGUAGE header, and checking if the first item somewhat matches one of the available (and checked) languages.
 
-> See [the implementation](./classes/class-supplang-locale-manager.php#50)
+> See [the implementation](./classes/class-supplang-locale-manager.php#L50)
 
 ## Utility function
 
@@ -87,7 +89,7 @@ Note that for this switcher to properly function, some JavaScript is involved in
 
 ## Rendering
 
-The `<select>` element (and its `<option>`) will be wrapped around a `<div class="">`. Suppose you checked French and English in your admin setting ; a call to `supplang_switcher()` would render the following HTML markup:
+The `<select>` element (and its `<option>`) will be wrapped around a `<div id="supplang-selector-wrapper">`. Suppose you checked French and English in your admin setting ; a call to `supplang_switcher()` would render the following HTML markup:
 
 ```html
 <div id="supplang-selector-wrapper">
@@ -111,11 +113,16 @@ In this case, the `<select>` element will be directly inserted in place:
   <option value="en">English</option>
 </select>
 ```
+> `supplang_switcher` accepts several other options.
+> See [the implementation](./frontend/api.php#L2)
+
 # API
 
 The Supplang plugin provides several utilities function, in addition to `supplang_switcher()`
 
 ## `supplang_languages()`
+
+> See [the implementation](./frontend/api.php#L36)
 
 **Returns an array of available languages.**
 
@@ -127,6 +134,8 @@ Each item is an array with the following properties:
 
 ## `supplang_home_url( $path = '' )`
 
+> See [the implementation](./frontend/api.php#L68)
+
 **Append the supplang `uil` query param to the home url, and returns it.**
 
 > This is a wrapper around [the wordpress `home_url()` function][1].
@@ -136,6 +145,8 @@ _Params:_
 
 ## `supplang_slug_from_locale()`
 
+> See [the implementation](./frontend/api.php#L80)
+
 **Get the supplang language slug corresponding to the current site locale.**
 
 > **Note:** The locale will be searched among the **available** languages as set in the **Settings > Site Languages** page.
@@ -144,6 +155,8 @@ _Returns:_
  * _(string)_ - The language slug, composed of the first two characters of the defined locale.
 
 ## `supplang_locale_from_slug( $slug )`
+
+> See [the implementation](./frontend/api.php#L90)
 
 **Get the supplang language locale corresponding to the given `$slug`.**
 
@@ -158,6 +171,8 @@ _Returns:_
 # Filters
 
 The plugin provide one filter, `supplang_register_languages` that allows you to add new supported languages to the plugin.
+
+> See [the implementation](./bootstrap.php#L60)
 
 To do this, call `add_filter` with a callback that accepts one parameter, which is an array of the currently registered languages. You then can add a new item (or several) to this array to register as much languages.
 
@@ -182,18 +197,55 @@ This will register the spanish languages as a new supported language by the plug
 
 > I repeat: registering a new language and checking it in the settings **does not translates your site in this language!**
 
-<!-- # Development
+# REST API
 
-## Release
+The plugin updates the WordPress REST API results and provide a new request param.
 
-cURL SSL certificate error resolution:
-* Download the `cacert.pem` file from https://curl.haxx.se/docs/caextract.html
-* Place the file on your server (like `C:\MAMP\cacert.pem`)
-* Update the `php.ini` file with_
-  curl.cainfo="C:\MAMP\cacert.pem"
-  openssl.cafile="C:\MAMP\cacert.pem"
-* Restart server -->
+> See [the implementation](./classes/class-supplang-api.php)
+
+# Development
+
+To contribute to this plugin, you'll need to have:
+
+* A local PHP Server (like MAMP), with a PHP version at least equals to the one supported by WordPress 5.1.1
+* A WordPress 5.1.1 (or higher) installed on your local server
+* [Composer] installed (and added to your `PATH` so that you can execute `composer` from your terminal)
+
+1. Clone this repository on your machine (I advise cloning it directly in the right folder, that is `wp-content/wp-plugins` of your WordPress instance)
+2. Install the composer dependencies:
+  ```
+  $> composer install
+  ```
+3. Go to your local WordPress admin, and to the **Plugins > Installed Plugins** to activate the **Supplang** plugin.
+
+## Project structure
+
+Here's a rapid description of the project's structure:
+
+* `admin` - Contains the `php` template used to display the plugin settings in the WordPress admin
+* `classes` - Contains the classes used in the plugin (this is where most of the plugin's logic takes place)
+* `cli-scripts` - Contains the scripts file used by the [composer scripts](#composer-scripts)
+* `frontend` - Contains files related to the theme frontend features (the public API, the templates, the JS)
+* `languages` - Contains the `.pot` file for translating the plugin (generate it with i.e. [POEdit])
+* `bootstrap.php` - Contains the code that bootstrap the plugin
+* `plugin.json` - Plugin metadata, used to generate the plugin entry file.
+* `supplang.php` - Plugin entry file. Automatically generated by a script (see below). DO NOT MANUALLY UDPATE!
+
+# Composer scripts
+
+The [`composer.json` file](.composer.json) provides some scripts:
+
+| Command                  | Description                                                                                                                                                           |
+| :----------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `composer lint`          | Execute PHPCS linting using the WordPress linting rules (it is advised to follow them, even if some are... questionnable)                                             |
+| `composer lint:fix`      | Executes PHPCS linting and fixes all the fixable errors                                                                                                               |
+| `composer release major` | Create a new semver major release for the plugin (See [the complete description](./cli-scripts/releases.php#L89))                                                     |
+| `composer release minor` | Create a new semver minor release for the plugin (See [the complete description](./cli-scripts/releases.php#L89))                                                     |
+| `composer release patch` | Create a new semver patch release for the plugin (See [the complete description](./cli-scripts/releases.php#L89))                                                     |
+| `composer plugin-header` | Automatically generates the `supplang.php` file using the `plugin.json` values (used by the `composer release <type>` script. You shouldn't have to call it manually) |
 
 [1]: https://developer.wordpress.org/reference/functions/home_url/
 [2]: https://github.com/Fonsart/nh3-mag-supplang-plugin/releases
 [3]: https://translate.wordpress.org/
+[composer]: https://getcomposer.org/
+[poedit]: https://poedit.net/

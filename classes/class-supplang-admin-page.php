@@ -2,6 +2,10 @@
 
 if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
 
+  /**
+   * This class manages the settings admin page of this plugin.
+   * This means registering the custom option, and setting up the custom setting page.
+   */
 	class Supplang_Admin_Page {
 
 		const SECTION_NAME  = 'supplang_uil_list';
@@ -16,15 +20,21 @@ if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
 			$option = get_option( SUPPLANG_AVAILABLE_UIL );
 			// Test if setting exists
 			$this->option_values = $option ? $option : array();
-			$this->languages     = $this->extend_available_languages();
+			$this->languages     = supplang_registered_languages();
 		}
 
+    /**
+     * Registers the settings page component and custom option
+     */
 		public function register_admin_content() {
 			register_setting( SUPPLANG_OPTION_GROUP, SUPPLANG_AVAILABLE_UIL );
 			$this->register_setting_section();
 			$this->register_setting_field();
 		}
 
+    /**
+     * Registers the admin setting page
+     */
 		public function register_admin_page() {
 			add_options_page(
 				__( 'Site Languages Settings', 'supplang' ),
@@ -35,6 +45,9 @@ if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
 			);
 		}
 
+    /**
+     * Registers the admin setting section, that will be included in the admin setting page
+     */
 		public function register_setting_section() {
 			add_settings_section(
 				self::SECTION_NAME,
@@ -44,6 +57,9 @@ if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
 			);
 		}
 
+    /**
+     * Registers the settings field, that is the list of available languages and their respective checkbox
+     */
 		public function register_setting_field() {
 			add_settings_field(
 				'supplang_available_languages',
@@ -58,6 +74,13 @@ if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
 			);
 		}
 
+    /**
+     * Factory function that returns a closure to load the appropriate template.
+     * The given $template_name should be the name of the tempate file to load, without the `.php` extension.
+     * This file MUST exists in the ./admin/templates/ directory.
+     * @param string $template_name The name of the template.
+     * @return function A function that when called, will load the template
+     */
 		public function load_template( $template_name ) {
 			$option_values = $this->option_values;
 			// N.B.: The $args param of the anonymous function is used in the templates
@@ -65,19 +88,8 @@ if ( ! class_exists( 'Supplang_Admin_Page' ) ) {
 			return function( $args ) use ( $template_name, $option_values ) {
 				include __DIR__ . "/../admin/templates/$template_name.php";
 			};
-		}
+    }
 
-		private function extend_available_languages() {
-			return array_map(
-				function( $language ) {
-					// TODO check if po file exists
-					// TODO if po file -> link to edit translation
-					// TODO if no po file -> link to create po file ?
-					$path                  = rawurlencode( "themes/nh3-mag/languages/{$language['locale']}.po" );
-					$language['loco_link'] = get_site_url() . "/wp-admin/admin.php?path=$path&bundle=nh3-mag&domain=nh3-mag&page=loco-theme&action=file-edit";
-					return $language;
-				}, supplang_registered_languages()
-			);
-		}
-	}
+  }
+
 }
