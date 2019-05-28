@@ -208,9 +208,9 @@ This will register the spanish languages as a new supported language by the plug
 
 # REST API
 
-The plugin updates the WordPress REST API results and provide a new request param.
+The plugin updates the WordPress REST API results and provides a new request param.
 
-> See [the implementation](./classes/class-supplang-api.php)
+> See [the implementation](./classes/class-supplang-api.php) and [the theme documentation](https://github.com/Fonsart/nh3-mag-wp-theme/blob/master/API.md)
 
 # Development
 

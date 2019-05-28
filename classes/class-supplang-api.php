@@ -64,17 +64,17 @@ if ( ! class_exists( 'Supplang_Api' ) ) {
 		 * Return an MO object for the provided $lang_slug.
 		 * If the $lang_slug does not match an available supplang language,
 		 * or there is no MO file for the matching locale, then NULL is returned.
-     * The MO file is first searched in the theme languages folder, then in the languages/loco/themes folder, added by the Loco Translate plugin
+		 * The MO file is first searched in the theme languages folder, then in the languages/loco/themes folder, added by the Loco Translate plugin
 		 *
 		 * @param String $lang_slug The language slug
 		 * @return MO|Null The MO file for the language, or NULL
 		 */
 		private function get_language_mo( $lang_slug ) {
 			$locale = supplang_locale_from_slug( $lang_slug );
-      $mofile = get_template_directory() . "/languages/$locale.mo";
-      if ( ! file_exists( $mofile ) ) {
-        $mofile = ABSPATH . "wp-content/languages/loco/themes/nh3-mag-$locale.mo";
-      }
+			$mofile = get_template_directory() . "/languages/$locale.mo";
+			if ( ! file_exists( $mofile ) ) {
+				$mofile = ABSPATH . "wp-content/languages/loco/themes/nh3-mag-$locale.mo";
+			}
 			if ( null !== $locale && file_exists( $mofile ) ) {
 				$mo = new MO();
 				$mo->import_from_file( $mofile );
