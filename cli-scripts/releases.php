@@ -137,7 +137,9 @@ class Releases {
 	 *                `current` contains the new version number.
 	 */
 	private static function bumpVersionNumberTo( $type ) {
-		exec( 'git tag -l', $tags ); // Get git tags
+    exec( 'git tag -l', $tags ); // Get git tags
+    // Naturaly sort the tags, so that x.x.10 is after x.x.9
+    natsort( $tags );
 		$version['last'] = count( $tags ) === 0 ? 'v0.0.0' : end( $tags );
 		$last_array      = explode( '.', str_replace( 'v', '', $version['last'] ) );
 		$current_array   = array(
