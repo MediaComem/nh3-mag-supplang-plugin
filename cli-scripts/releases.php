@@ -26,8 +26,8 @@ class Releases {
 		$action = $args[0];
 		if ( $action === self::COMMANDS[1] ) { // zip
 			write( 'You wish to make a zip' );
-			$version = isset( $args[1] ) ? $args[1] : null;
-			if ( preg_match( self::VERSION_SYNTAX, $version ) ) {
+			$version = isset( $args[1] ) ? $args[1] : self::getLatestGitTag();
+			if ( $version === "latest" || preg_match( self::VERSION_SYNTAX, $version ) ) {
 				self::makeZipFolder( $version );
 			} else {
 				write(
@@ -66,18 +66,20 @@ class Releases {
 		write(
 			array(
 				'---------------------------------------',
-				'Make and deploy a new release to GitLab',
+				'Make and deploy a new release to GitHub',
 				'',
 				'Usage:',
 				' composer release [make] <major|minor|patch>',
+				' composer release zip [version]',
 				'',
 				'Arguments:',
 				'  major ---- will increment the first number of the release version.',
 				'             example: getting from a v1.2.3 to a v2.0.0',
 				'  minor ---- will increment the second number of the release version.',
-				'             example: getting from a v.1.2.3 to a v.1.3.0',
+				'             example: getting from a v1.2.3 to a v1.3.0',
 				'  patch ---- will increment the last number of the release version.',
-				'             example: getting from a v.1.2.3 to a v.1.2.4',
+				'             example: getting from a v1.2.3 to a v1.2.4',
+				'  version -- will make a zip for a version or for the "latest" version (defaults to the latest Git tag).',
 				'Help:',
 				'  Update the plugin.json file.',
 				'  Regenerate a new supplang.php file.',
@@ -131,16 +133,25 @@ class Releases {
 	}
 
 	/**
+	 * Retrieves the latest version-like Git tag (i.e. vX.Y.Z) of the repository,
+	 * defaulting to "v0.0.0" if no tag exists.
+	 * @return String The latest Git tag.
+	 */
+	private static function getLatestGitTag() {
+		exec( 'git tag -l', $tags ); // Get git tags
+		// Naturaly sort the tags, so that x.x.10 is after x.x.9
+		natsort( $tags );
+		return count( $tags ) === 0 ? 'v0.0.0' : end( $tags );
+	}
+
+	/**
 	 * Retrieve the last version number from the git tags of the repository, and up it according to the $type argument.
 	 * @return Array An array with two item.
 	 *                `last` contains the last version number.
 	 *                `current` contains the new version number.
 	 */
 	private static function bumpVersionNumberTo( $type ) {
-    exec( 'git tag -l', $tags ); // Get git tags
-    // Naturaly sort the tags, so that x.x.10 is after x.x.9
-    natsort( $tags );
-		$version['last'] = count( $tags ) === 0 ? 'v0.0.0' : end( $tags );
+		$version['last'] = self::getLatestGitTag();
 		$last_array      = explode( '.', str_replace( 'v', '', $version['last'] ) );
 		$current_array   = array(
 			'major' => (int) $last_array[0],
@@ -179,6 +190,9 @@ class Releases {
 		$zipName    = "{$pluginName}_{$version}.zip";
 		$zipPath    = "releases/$zipName";
 		try {
+			if (!file_exists("releases")) {
+				mkdir("releases");
+			}
 			$zip = new ZipArchive();
 			if ( $zip->open( $zipPath, ZipArchive::CREATE ) !== true ) {
 				throw new Exception( "cannot open <$zipPath>\n" );
